@@ -83,7 +83,8 @@ resgate.
 - `apps/functions/package.json` declara `engines.node: "24"`, não confirmado
   contra o runtime real de deploy.
 - Não há suíte de testes em nenhum dos dois apps.
-- Nenhuma transação, ao ocorrer, altera o saldo da carteira do usuário
-  (`IUser.wallet`) — é um campo hoje editado manualmente pela UI. Essa
-  lacuna é o motivo original desta reestruturação e será tratada como uma
-  próxima etapa de planejamento separada.
+- O saldo da carteira (`IUser.wallet`) passou a ser reconciliado
+  automaticamente a cada ocorrência de transação (`apps/functions/src/wallet/reconcile-wallet.ts`),
+  além de continuar editável manualmente. O script de backfill
+  (`apps/functions/src/scripts/backfill-wallet-ledger.ts`) ainda não foi
+  executado contra o projeto Firebase real.
