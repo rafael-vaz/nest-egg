@@ -1,0 +1,20 @@
+.p-slider {
+  background-color: var(--ne-c6);
+}
+
+.p-slider-handle {
+  width: 1rem;
+  height: 1rem;
+  transform: translate(-50%, -50%) !important;
+  background-color: var(--ne-c6);
+  border-color: var(--ne-c11);
+}
+
+.p-slider-handle:focus,
+.p-slider-handle:hover {
+  background-color: var(--ne-c11);
+}
+
+.p-slider-range {
+  background: var(--ne-c11);
+}

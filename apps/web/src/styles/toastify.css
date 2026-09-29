@@ -1,0 +1,23 @@
+.Toastify__toast-theme--dark {
+  background: var(--ne-c9);
+}
+
+.Toastify__close-button svg {
+  fill: var(--ne-c5);
+}
+
+.Toastify__toast--success .Toastify__toast-icon svg {
+  color: var(--success);
+  fill: var(--success);
+}
+.Toastify__progress-bar--success {
+  background-color: var(--success);
+}
+
+.Toastify__toast--error .Toastify__toast-icon svg {
+  color: var(--error);
+  fill: var(--error);
+}
+.Toastify__progress-bar--error {
+  background: var(--error);
+}

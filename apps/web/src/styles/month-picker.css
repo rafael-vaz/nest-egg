@@ -1,0 +1,126 @@
+/* container */
+.mantine-MonthPicker-levelsGroup {
+  font-family: inherit;
+  background-color: var(--ne-c8);
+  border-radius: 0.625rem;
+  border: 1px solid var(--ne-c6);
+  box-shadow: var(--shadow-md);
+  min-width: 16.25rem;
+}
+
+.mantine-MonthPicker-monthsList,
+.mantine-MonthPicker-yearsList,
+div[data-decade-level="true"],
+div[data-year-level="true"] {
+  width: 100% !important;
+}
+
+/* header */
+.mantine-MonthPicker-calendarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.375rem;
+  border-bottom: 1px solid var(--ne-c6);
+  gap: 0.375rem;
+}
+
+/* previous/next buttons */
+.mantine-MonthPicker-calendarHeaderControl {
+  height: 1.875rem !important;
+  width: 1.875rem !important;
+  border: none;
+  background-color: var(--ne-c7) !important;
+  border-radius: 0.25rem !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ne-c2);
+}
+
+.mantine-MonthPicker-calendarHeaderControl:focus,
+.mantine-MonthPicker-calendarHeaderControl:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c6) !important;
+}
+
+.mantine-MonthPicker-calendarHeaderControl svg {
+  width: 1rem !important;
+  height: 1rem !important;
+  display: block;
+}
+
+/* year button */
+.mantine-MonthPicker-calendarHeaderLevel {
+  height: 1.875rem !important;
+  width: 100%;
+  border: none;
+  border-radius: 0.25rem !important;
+  background: var(--ne-c7) !important;
+  font-family: var(--content-font);
+  font-weight: var(--normal) !important;
+  color: var(--ne-c2);
+  cursor: pointer !important;
+}
+
+.mantine-MonthPicker-calendarHeaderLevel:focus,
+.mantine-MonthPicker-calendarHeaderLevel:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c6) !important;
+}
+
+/* tables */
+table[class*="mantine-MonthPicker-yearsList"],
+table[class*="MonthPicker-monthsList"] {
+  border-collapse: separate;
+  border-spacing: 6px;
+}
+
+td[data-with-spacing="true"] {
+  padding: 0;
+}
+
+/* month buttons */
+button[data-picker-control="true"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.25rem;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+  border: none;
+  font-size: 0.875rem;
+  min-width: 3.125rem;
+  height: 1.875rem;
+  color: var(--ne-c2);
+  width: 100%;
+}
+
+button[data-picker-control="true"]:not([data-first-in-range="true"]):not(
+    [data-last-in-range="true"]
+  ):hover {
+  transition: 0.2s;
+  background-color: var(--ne-c6);
+  color: var(--ne-c2);
+}
+
+/* first and last in range */
+button[data-first-in-range="true"],
+button[data-last-in-range="true"] {
+  color: var(--ne-c10);
+  background-color: var(--ne-c11) !important;
+  font-weight: var(--medium);
+}
+
+button[data-first-in-range="true"]:hover,
+button[data-last-in-range="true"]:hover {
+  filter: brightness(0.8);
+}
+
+button[data-in-range="true"] {
+  background-color: var(--ne-c7);
+}
