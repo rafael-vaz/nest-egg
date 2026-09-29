@@ -44,6 +44,7 @@ const WalletBalanceCard = () => {
       uid: authUser.uid,
       hasAlert: false,
       wallet: newWalletValue,
+      walletUpdatedAt: new Date().toISOString(),
     };
 
     try {
