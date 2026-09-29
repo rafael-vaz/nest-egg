@@ -1,6 +1,12 @@
 {
   "name": "nest-egg",
+  "description": "A personal finance tracker for managing transactions and keeping wallet balance in sync automatically.",
   "private": true,
   "version": "0.0.0",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rafael-vaz/nest-egg.git"
+  },
   "workspaces": ["apps/*", "packages/*"]
 }
