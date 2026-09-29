@@ -123,14 +123,44 @@ export const onTransactionWrite = onDocumentUpdated(
         JSON.stringify(before?.recurrence) !==
           JSON.stringify(after.recurrence);
 
-      if (!recurrenceChanged) return;
+      // The client resets occurrenceLog to null on every save, not only when
+      // recurrence changes — without this check, an unrelated edit to a
+      // still-recurring transaction would leave the log empty until the next
+      // scheduled run, which would then reconcile a truncated log and
+      // wrongly reverse real past occurrences. Restricted to transactions
+      // that still have recurrence: for a non-recurring transaction,
+      // recalculateOccurrenceLogs always nulls the log (see below), so
+      // triggering here would wipe it before processSingleOccurrence's own
+      // self-healing regeneration gets a chance to run.
+      const occurrenceLogWasReset =
+        !!after.recurrence &&
+        !after.occurrenceLog?.length &&
+        !!before?.occurrenceLog?.length;
 
-      logger.info("recurrence changed, recalculating occurrence log", {
+      if (!recurrenceChanged && !occurrenceLogWasReset) return;
+
+      // Recurrence was removed: the occurrences already logged under it are
+      // real history and must keep affecting the wallet, so restore what the
+      // client just wiped instead of discarding it.
+      const recurrenceWasRemoved =
+        recurrenceChanged && !after.recurrence && before?.occurrenceLog?.length;
+      if (recurrenceWasRemoved) {
+        await e.data?.after.ref.update({
+          hasRecurrence: false,
+          occurrenceLog: before.occurrenceLog,
+          updatedAt: new Date().toISOString(),
+        });
+        return;
+      }
+
+      logger.info("recalculating occurrence log", {
         userId,
         transactionId,
+        recurrenceChanged,
+        occurrenceLogWasReset,
       });
 
-      // If recurrence was added or changed, recalculate all occurrence logs
+      // Recalculate all occurrence logs from the recurrence's start date
       const tx = after as ITransaction;
       const {logs, nextDate} = recalculateOccurrenceLogs(tx, new Date());
 
