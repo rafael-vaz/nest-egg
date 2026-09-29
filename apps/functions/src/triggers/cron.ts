@@ -1,9 +1,11 @@
 import {onSchedule} from "firebase-functions/v2/scheduler";
-import {onCall} from "firebase-functions/v2/https";
+import {onCall, HttpsError} from "firebase-functions/v2/https";
 import {getFirestore} from "firebase-admin/firestore";
+import * as logger from "firebase-functions/logger";
 import {getNextOccurrence} from "../recurrence/engine";
 import crypto from "crypto";
 import {ITransaction} from "../recurrence/types";
+import {reconcileWallet} from "../wallet/reconcile-wallet";
 
 /**
  * Process a single-occurrence (non-recurring) transaction
@@ -15,36 +17,50 @@ async function processSingleOccurrence(
   now: Date,
 ) {
   const tx = doc.data() as ITransaction;
+  const userId = doc.ref.parent.parent?.id;
 
-  if (!tx.date || tx.recurrence) return;
+  try {
+    if (!tx.date || tx.recurrence) return;
 
-  // Normalize dates to start of day
-  const normalizedNow = new Date(now);
-  normalizedNow.setHours(0, 0, 0, 0);
+    // Normalize dates to start of day
+    const normalizedNow = new Date(now);
+    normalizedNow.setHours(0, 0, 0, 0);
 
-  const txDate = new Date(tx.date);
-  txDate.setHours(0, 0, 0, 0);
+    const txDate = new Date(tx.date);
+    txDate.setHours(0, 0, 0, 0);
 
-  // Only process if the transaction date has arrived or passed
-  if (txDate > normalizedNow) return;
+    // Only process if the transaction date has arrived or passed
+    if (txDate > normalizedNow) return;
 
-  const existingLog = tx.occurrenceLog || [];
+    const existingLog = tx.occurrenceLog || [];
 
-  // Check if already logged (should only have one log for single occurrence)
-  if (existingLog.length > 0) return;
+    // Check if already logged (should only have one log for single occurrence)
+    if (existingLog.length > 0) return;
 
-  // Generate single occurrence log
-  const singleLog = {
-    id: crypto.randomUUID(),
-    date: tx.date,
-    value: tx.value,
-    type: tx.type,
-  };
+    // Generate single occurrence log
+    const singleLog = {
+      id: crypto.randomUUID(),
+      date: tx.date,
+      value: tx.value,
+      type: tx.type,
+    };
 
-  await doc.ref.update({
-    occurrenceLog: [singleLog],
-    updatedAt: new Date().toISOString(),
-  });
+    await doc.ref.update({
+      occurrenceLog: [singleLog],
+      updatedAt: new Date().toISOString(),
+    });
+
+    if (userId) {
+      await reconcileWallet(userId, doc.id, [singleLog]);
+    }
+  } catch (error) {
+    logger.error("failed to process single occurrence", {
+      userId,
+      transactionId: doc.id,
+      error,
+    });
+    throw error;
+  }
 }
 
 /**
@@ -57,75 +73,90 @@ async function processTransactionRecurrence(
   now: Date,
 ) {
   const tx = doc.data() as ITransaction;
+  const userId = doc.ref.parent.parent?.id;
 
-  if (!tx.date || !tx.recurrence) return;
+  try {
+    if (!tx.date || !tx.recurrence) return;
 
-  // Normalize dates to start of day to avoid time discrepancies
-  const normalizedNow = new Date(now);
-  normalizedNow.setHours(0, 0, 0, 0);
+    // Normalize dates to start of day to avoid time discrepancies
+    const normalizedNow = new Date(now);
+    normalizedNow.setHours(0, 0, 0, 0);
 
-  let currentDate = new Date(tx.date);
-  currentDate.setHours(0, 0, 0, 0);
+    let currentDate = new Date(tx.date);
+    currentDate.setHours(0, 0, 0, 0);
 
-  const existingLog = tx.occurrenceLog || [];
-  const newOccurrences: typeof existingLog = [];
-  let nextFutureDate: Date | null = null;
+    const existingLog = tx.occurrenceLog || [];
+    const newOccurrences: typeof existingLog = [];
+    let nextFutureDate: Date | null = null;
 
-  let safety = 0; // prevents infinite loops
+    let safety = 0; // prevents infinite loops
 
-  // Include occurrences from the start date up to and including today
-  while (currentDate <= normalizedNow && safety < 500) {
-    const currentDateStr = currentDate.toISOString();
+    // Include occurrences from the start date up to and including today
+    while (currentDate <= normalizedNow && safety < 500) {
+      const currentDateStr = currentDate.toISOString();
 
-    // Check if this occurrence is already in the log
-    const alreadyLogged = existingLog.some(
-      (log) => log.date === currentDateStr,
-    );
+      // Check if this occurrence is already in the log
+      const alreadyLogged = existingLog.some(
+        (log) => log.date === currentDateStr,
+      );
 
-    // Only register if not already logged
-    if (!alreadyLogged) {
-      newOccurrences.push({
-        id: crypto.randomUUID(),
-        date: currentDateStr,
-        value: tx.value,
-        type: tx.type,
+      // Only register if not already logged
+      if (!alreadyLogged) {
+        newOccurrences.push({
+          id: crypto.randomUUID(),
+          date: currentDateStr,
+          value: tx.value,
+          type: tx.type,
+        });
+      }
+
+      // Calculate the next occurrence
+      const next = getNextOccurrence({
+        ...tx,
+        date: currentDate.toISOString(),
+      });
+
+      if (!next) break;
+
+      // Normalize the next date
+      next.setHours(0, 0, 0, 0);
+
+      // If the next is in the future, save it and stop
+      if (next > normalizedNow) {
+        nextFutureDate = next;
+        break;
+      }
+
+      currentDate = next;
+      safety++;
+    }
+
+    // Only update if there are new occurrences or a future date
+    if (newOccurrences.length > 0) {
+      const fullLog = [...existingLog, ...newOccurrences];
+      await doc.ref.update({
+        date: nextFutureDate?.toISOString() || null,
+        occurrenceLog: fullLog,
+        updatedAt: new Date().toISOString(),
+      });
+
+      if (userId) {
+        await reconcileWallet(userId, doc.id, fullLog);
+      }
+    } else if (nextFutureDate) {
+      // Only update the next date without new occurrences
+      await doc.ref.update({
+        date: nextFutureDate.toISOString(),
+        updatedAt: new Date().toISOString(),
       });
     }
-
-    // Calculate the next occurrence
-    const next = getNextOccurrence({
-      ...tx,
-      date: currentDate.toISOString(),
+  } catch (error) {
+    logger.error("failed to process transaction recurrence", {
+      userId,
+      transactionId: doc.id,
+      error,
     });
-
-    if (!next) break;
-
-    // Normalize the next date
-    next.setHours(0, 0, 0, 0);
-
-    // If the next is in the future, save it and stop
-    if (next > normalizedNow) {
-      nextFutureDate = next;
-      break;
-    }
-
-    currentDate = next;
-    safety++;
-  }
-
-  // Only update if there are new occurrences or a future date
-  if (newOccurrences.length > 0) {
-    await doc.ref.update({
-      date: nextFutureDate?.toISOString() || null,
-      occurrenceLog: [...existingLog, ...newOccurrences],
-      updatedAt: new Date().toISOString(),
-    });
-  } else if (nextFutureDate) {
-    // Only update the next date without new occurrences
-    await doc.ref.update({
-      date: nextFutureDate.toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
+    throw error;
   }
 }
 
@@ -146,6 +177,10 @@ export const processRecurrences = onSchedule(
       .where("hasRecurrence", "==", true)
       .get();
 
+    logger.info("processing recurring transactions", {
+      count: recurringSnap.size,
+    });
+
     for (const doc of recurringSnap.docs) {
       await processTransactionRecurrence(doc, now);
     }
@@ -155,6 +190,10 @@ export const processRecurrences = onSchedule(
       .collectionGroup("transactions")
       .where("hasRecurrence", "==", false)
       .get();
+
+    logger.info("processing single-occurrence transactions", {
+      count: singleSnap.size,
+    });
 
     for (const doc of singleSnap.docs) {
       await processSingleOccurrence(doc, now);
@@ -168,10 +207,15 @@ export const processTransactionRecurrenceManual = onCall(
     region: "us-central1",
   },
   async (request) => {
-    const {userId, transactionId} = request.data;
+    if (!request.auth) {
+      throw new HttpsError("unauthenticated", "Must be signed in");
+    }
 
-    if (!userId || !transactionId) {
-      throw new Error("Missing required parameters: userId, transactionId");
+    const userId = request.auth.uid;
+    const {transactionId} = request.data;
+
+    if (!transactionId || typeof transactionId !== "string") {
+      throw new HttpsError("invalid-argument", "Missing transactionId");
     }
 
     const db = getFirestore();
@@ -180,7 +224,7 @@ export const processTransactionRecurrenceManual = onCall(
       .get();
 
     if (!doc.exists) {
-      throw new Error("Transaction not found");
+      throw new HttpsError("not-found", "Transaction not found");
     }
 
     const tx = doc.data() as ITransaction;

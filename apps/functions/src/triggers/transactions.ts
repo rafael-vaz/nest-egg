@@ -1,7 +1,9 @@
 import {onDocumentUpdated} from "firebase-functions/v2/firestore";
+import * as logger from "firebase-functions/logger";
 import {getNextOccurrence} from "../recurrence/engine";
 import {ITransaction, ITransactionOccurrenceLog} from "../recurrence/types";
 import crypto from "crypto";
+import {reconcileWallet} from "../wallet/reconcile-wallet";
 
 /**
  * Recalculates occurrence logs based on new recurrence settings
@@ -108,38 +110,57 @@ function recalculateOccurrenceLogs(
 export const onTransactionWrite = onDocumentUpdated(
   "nest-egg-users/{userId}/transactions/{id}",
   async (e) => {
-    const before = e.data?.before.data();
-    const after = e.data?.after.data();
+    const {userId, id: transactionId} = e.params;
 
-    if (!after) return;
+    try {
+      const before = e.data?.before.data();
+      const after = e.data?.after.data();
 
-    // Check if recurrence was added, removed, or changed
-    const recurrenceChanged =
-      JSON.stringify(before?.recurrence) !== JSON.stringify(after.recurrence);
+      if (!after) return;
 
-    if (!recurrenceChanged) return;
+      // Check if recurrence was added, removed, or changed
+      const recurrenceChanged =
+        JSON.stringify(before?.recurrence) !==
+          JSON.stringify(after.recurrence);
 
-    // If recurrence was added or changed, recalculate all occurrence logs
-    const tx = after as ITransaction;
-    const {logs, nextDate} = recalculateOccurrenceLogs(tx, new Date());
+      if (!recurrenceChanged) return;
 
-    // If removed, don't update date (keep the one from frontend)
-    const updateData: {
-      hasRecurrence: boolean;
-      occurrenceLog: ITransactionOccurrenceLog[] | null;
-      updatedAt: string;
-      date?: string | null;
-    } = {
-      hasRecurrence: !!after.recurrence,
-      occurrenceLog: logs,
-      updatedAt: new Date().toISOString(),
-    };
+      logger.info("recurrence changed, recalculating occurrence log", {
+        userId,
+        transactionId,
+      });
 
-    // Only update date if recurrence exists
-    if (after.recurrence) {
-      updateData.date = nextDate;
+      // If recurrence was added or changed, recalculate all occurrence logs
+      const tx = after as ITransaction;
+      const {logs, nextDate} = recalculateOccurrenceLogs(tx, new Date());
+
+      // If removed, don't update date (keep the one from frontend)
+      const updateData: {
+        hasRecurrence: boolean;
+        occurrenceLog: ITransactionOccurrenceLog[] | null;
+        updatedAt: string;
+        date?: string | null;
+      } = {
+        hasRecurrence: !!after.recurrence,
+        occurrenceLog: logs,
+        updatedAt: new Date().toISOString(),
+      };
+
+      // Only update date if recurrence exists
+      if (after.recurrence) {
+        updateData.date = nextDate;
+      }
+
+      await e.data?.after.ref.update(updateData);
+
+      await reconcileWallet(userId, transactionId, updateData.occurrenceLog);
+    } catch (error) {
+      logger.error("failed to process transaction write", {
+        userId,
+        transactionId,
+        error,
+      });
+      throw error;
     }
-
-    await e.data?.after.ref.update(updateData);
   },
 );
