@@ -7,6 +7,7 @@ import { RootState, useAppDispatch } from "../../store/configure-store";
 import { updateAuthUser } from "../../store/reducers/user/user-auth";
 import { setLoading } from "../../store/reducers/user/user-finances";
 import { updateUserThunk } from "../../store/thunks/user/user-data";
+import formatRelativeDate from "../../utils/date/format-relative-date";
 import formatCurrency from "../../utils/text/format-currency";
 import formatCurrencyInput from "../../utils/text/format-currency-input";
 import parseCurrency from "../../utils/text/parse-currency";
@@ -74,22 +75,13 @@ const WalletBalanceCard = () => {
           onInput={formatCurrencyInput}
           value={formatCurrency(`${walletValue}`)}
         />
-
-        <p className={styles.walletBalanceCardLastTransaction}>
-          Transações recentes:{" "}
-          <span
-            className={styles.value}
-            data-type="credit"
-            aria-label="Crédito de R$ 250,00"
-          >
-            <span aria-hidden={true}>+ R$ 250,00</span>
-          </span>
-        </p>
       </div>
 
-      <span className={styles.walletBalanceCardLastUpdate}>
-        Atualizado há 2 semanas
-      </span>
+      {authUser?.walletUpdatedAt && (
+        <span className={styles.walletBalanceCardLastUpdate}>
+          Atualizado {formatRelativeDate(new Date(authUser.walletUpdatedAt))}
+        </span>
+      )}
     </Card>
   );
 };

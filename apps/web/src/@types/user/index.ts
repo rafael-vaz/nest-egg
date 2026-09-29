@@ -11,6 +11,7 @@ export interface IUser {
   emailVerified: boolean;
   dateOfBirth: Date | string;
   wallet: number;
+  walletUpdatedAt?: string;
 }
 
 export interface IUserFinancesSlice {

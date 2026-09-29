@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 
 import { useTransactionsListener } from "../../hooks/transaction/use-transactions-listener";
+import { useUserListener } from "../../hooks/user/use-user-listener";
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { setLoading } from "../../store/reducers/user/user-finances";
 import { readAllCollectionsThunk } from "../../store/thunks/collection/collection-data";
@@ -21,6 +22,7 @@ const ProtectedRoutes = ({ children }: IProtectedRoutesProps) => {
   const { auth, authUser } = useSelector((state: RootState) => state.userAuth);
   const { loading } = useSelector((state: RootState) => state.userFinances);
   useTransactionsListener(authUser?.uid);
+  useUserListener(authUser?.uid);
 
   React.useEffect(() => {
     if (auth && authUser?.uid) {
