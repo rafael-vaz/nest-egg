@@ -1,0 +1,36 @@
+.creationMenuListItem {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.25rem;
+  background-color: var(--ne-c8);
+  border-radius: 0.625rem;
+  padding: 0.625rem;
+  font-size: 1rem;
+  font-family: var(--content-font);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.creationMenuListItem:hover {
+  transition: 0.2s;
+  border: 1px solid var(--ne-c12);
+}
+
+.creationMenuListItem svg {
+  color: var(--ne-c11);
+}
+
+.creationMenuListItem p {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.625rem;
+  color: var(--ne-c2);
+  margin: 0;
+}
+
+.creationMenuListItem > span {
+  font-size: 0.875rem;
+  color: var(--ne-c4);
+}

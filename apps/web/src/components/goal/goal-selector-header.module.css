@@ -1,0 +1,18 @@
+.goalSelectorHeader {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.goalSelectorHeaderContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.goalSelectorHeaderControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+}

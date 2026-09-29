@@ -1,0 +1,10 @@
+.mainContainer {
+  padding: 1.25rem;
+  margin-left: var(--sidebar-width);
+}
+
+@media (max-width: 31.25rem) {
+  .mainContainer {
+    margin-left: 0;
+  }
+}

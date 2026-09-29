@@ -1,0 +1,35 @@
+.categoryAndPercentagePicker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.categoryAndPercentagePickerSelect {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.categoryAndPercentagePickerSlider {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 0;
+}
+
+@media (max-width: 62.5rem) {
+  .categoryAndPercentagePicker {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  .categoryAndPercentagePickerSelect {
+    border-top-right-radius: 0.625rem;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-bottom: none;
+  }
+  .categoryAndPercentagePickerSlider {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0.625rem;
+    border-left: 1px solid var(--ne-c6);
+  }
+}

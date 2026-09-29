@@ -1,0 +1,43 @@
+.monetaryValueInterval {
+  height: 2.25rem;
+  width: 100%;
+  min-width: min-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.625rem;
+  overflow: hidden;
+  border: 1px solid var(--ne-c6);
+}
+
+.monetaryValueInterval:focus {
+  border-color: var(--ne-c12);
+}
+
+.text {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: max-content;
+  color: var(--ne-c2);
+  padding: 0.625rem;
+  background-color: var(--ne-c7);
+}
+
+.value {
+  min-width: 7.5rem;
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+.value:focus {
+  box-shadow: none !important;
+}
+
+@media (max-width: 31.25rem) {
+  .value {
+    min-width: min-content;
+  }
+}

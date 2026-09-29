@@ -1,0 +1,4 @@
+.tableHeaderCell {
+  padding: 0.5rem;
+  border: 0.0625rem solid var(--ne-c6);
+}

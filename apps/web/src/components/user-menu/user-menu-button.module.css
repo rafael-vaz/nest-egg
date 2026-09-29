@@ -1,0 +1,17 @@
+.userMenuButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3.125rem;
+  width: 100%;
+  border: none;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.userMenuButton img {
+  height: 1.875rem;
+  width: 1.875rem;
+  border-radius: 50%;
+}

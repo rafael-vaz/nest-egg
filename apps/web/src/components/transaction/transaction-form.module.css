@@ -1,0 +1,8 @@
+.transactionFormValueGroup {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  place-items: start;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}

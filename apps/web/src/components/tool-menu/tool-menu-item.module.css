@@ -1,0 +1,25 @@
+.toolMenuItem {
+  min-height: 3.125rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.875rem 1fr;
+  place-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--ne-c6);
+  font-size: 1rem;
+  color: var(--ne-c2);
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.toolMenuItem span {
+  justify-self: start;
+}
+
+.toolMenuItem:focus,
+.toolMenuItem:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c8);
+}

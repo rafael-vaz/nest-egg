@@ -1,0 +1,26 @@
+.profileCoverMenuContent {
+  position: absolute;
+  top: 2.875rem;
+  right: 0;
+  width: 100%;
+  max-width: 32.75rem;
+  background-color: var(--ne-c8);
+  border-radius: 0.625rem;
+  padding: 0.625rem;
+  z-index: 2;
+}
+
+.profileCoverMenuList {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  place-items: center;
+  gap: 0.625rem;
+  margin-top: 0.625rem;
+  list-style: none;
+}
+
+@media (max-width: 31.25rem) {
+  .profileCoverMenuList {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

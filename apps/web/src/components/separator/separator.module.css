@@ -1,0 +1,10 @@
+.separator {
+  border: none;
+  height: 1px;
+  background-color: var(--ne-c6);
+  margin: 2rem 0;
+}
+
+.separator[data-margin="medium"] {
+  margin: 1rem 0;
+}

@@ -1,0 +1,35 @@
+.sidebarItem {
+  height: auto;
+  width: 100%;
+}
+
+.sidebarItem button {
+  height: 3.125rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.25rem;
+  color: var(--ne-c2);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.sidebarItem button[id="sidebar-item-home"] div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.25rem;
+  color: var(--ne-c10);
+  height: 1.875rem;
+  width: 1.875rem;
+  background-color: var(--ne-c12);
+}
+
+.sidebarItem[data-active="true"],
+.sidebarItem:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c7);
+}

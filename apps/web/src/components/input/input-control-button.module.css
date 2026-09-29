@@ -1,0 +1,21 @@
+.inputControlButton {
+  position: absolute;
+  top: 0.1875rem;
+  right: 0.1875rem;
+  height: 1.875rem;
+  width: 1.875rem;
+  background-color: var(--ne-c7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--ne-c3);
+  border: none;
+  border-radius: 0.625rem;
+  cursor: pointer;
+}
+
+.inputControlButton:focus,
+.inputControlButton:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c9);
+}

@@ -1,0 +1,16 @@
+.profileCoverMenu {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.profileCoverMenu [id="cover-edit"] {
+  opacity: 0.6;
+}
+
+.profileCoverMenu [id="cover-edit"][data-active="true"],
+.profileCoverMenu [id="cover-edit"]:hover {
+  opacity: 1;
+}

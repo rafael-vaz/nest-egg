@@ -1,0 +1,43 @@
+.toolMenuBackground {
+  position: fixed;
+  height: 100dvh;
+  width: 100dvw;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 2;
+}
+
+.toolMenuBackground[data-active="true"] {
+  animation: increasesOpacity 0.3s forwards;
+}
+
+.toolMenuBackground[data-active="false"] {
+  animation: decreasesOpacity 0.3s forwards;
+}
+
+@keyframes increasesOpacity {
+  from {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+}
+
+@keyframes decreasesOpacity {
+  from {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+  }
+}

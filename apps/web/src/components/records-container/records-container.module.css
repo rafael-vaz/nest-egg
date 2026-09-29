@@ -1,0 +1,100 @@
+.recordsContainer {
+  position: relative;
+  min-height: 17.5rem;
+  width: 100%;
+  padding: 1.25rem;
+  background-color: var(--ne-c7);
+  border-radius: 0.625rem;
+  box-shadow: var(--shadow-md);
+  overflow-x: hidden;
+}
+
+.recordsContainerHeader {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.recordsContainerHeaderControls,
+.recordsContainerHeaderFilters {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.recordsContainerHeaderFilters,
+.recordsContainerContent {
+  width: 100%;
+}
+
+.recordsContainerContent p {
+  margin: 0;
+}
+
+.recordsContainerEmptyList {
+  padding: 1.25rem;
+  font-size: 0.875rem;
+  width: 100%;
+  color: var(--ne-c3);
+  background-color: var(--ne-c8);
+  border-radius: 0.625rem;
+  text-align: center;
+  text-align-last: center;
+}
+
+.recordsContainerEmptyList p {
+  margin: 0;
+}
+
+.recordFlex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.recordsContainerLink {
+  font-weight: var(--regular);
+  color: var(--ne-c11);
+}
+
+.recordStatusAccent {
+  color: var(--ne-c4);
+}
+.recordStatusAccent[data-status="active"] {
+  color: var(--info);
+}
+.recordStatusAccent[data-status="waiting"] {
+  color: var(--alert);
+}
+.recordStatusAccent[data-status="completed"] {
+  color: var(--success);
+}
+.recordStatusAccent[data-status="confirm"] {
+  color: var(--ne-c11);
+}
+.recordStatusAccent[data-status="debt"] {
+  color: var(--error);
+}
+.recordStatusAccent[data-status="credit"] {
+  color: var(--success);
+}
+
+@media (max-width: 75rem) {
+  .recordsContainerHeader {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+}
+
+@media (max-width: 62.5rem) {
+  .recordsContainerHeaderFilters {
+    flex-wrap: wrap;
+  }
+  .recordsContainerHeaderControls {
+    width: 100%;
+    justify-content: center;
+  }
+}

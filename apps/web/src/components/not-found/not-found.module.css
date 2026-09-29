@@ -1,0 +1,23 @@
+.notFound {
+  display: grid;
+  grid-template-columns: 1fr;
+  place-items: center;
+  max-width: 37.5rem;
+  gap: 1.5rem;
+}
+
+.notFound div p {
+  color: var(--ne-c3);
+  margin-bottom: 2rem;
+}
+
+.notFound img {
+  height: auto;
+  width: 6.25rem;
+}
+
+@media (max-width: 31.25rem) {
+  .notFound img {
+    width: 5rem;
+  }
+}

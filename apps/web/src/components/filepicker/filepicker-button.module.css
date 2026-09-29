@@ -1,0 +1,28 @@
+.filepickerButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  height: 2.1875rem;
+  width: 2.1875rem;
+  font-family: var(--content-font);
+  background-color: var(--ne-c6);
+  color: var(--ne-c2);
+  outline: none;
+  box-shadow: var(--shadow-lg);
+  transition: 0.2s;
+}
+
+.filepickerButton:hover {
+  filter: brightness(0.9);
+}
+
+.filepickerButton input {
+  display: none;
+}
+
+.filepickerButton[data-loading="true"] {
+  pointer-events: none;
+}

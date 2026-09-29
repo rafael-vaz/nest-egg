@@ -1,0 +1,42 @@
+.toolMenuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid var(--ne-c6);
+  padding: 0.625rem;
+}
+
+.toolMenuHeaderUser {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.875rem;
+  cursor: pointer;
+}
+
+.toolMenuHeaderUser p {
+  text-transform: capitalize;
+  font-size: 1rem;
+  font-family: var(--content-font);
+  color: var(--ne-c2);
+  max-width: 10rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+.toolMenuHeaderUserPhoto {
+  height: 1.875rem;
+  width: 1.875rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.toolMenuHeaderUserPhoto img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}

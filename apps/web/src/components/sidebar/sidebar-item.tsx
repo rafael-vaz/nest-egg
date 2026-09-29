@@ -1,0 +1,80 @@
+import { LucideProps } from "lucide-react";
+import React from "react";
+import { useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { RootState, useAppDispatch } from "../../store/configure-store";
+import { openModalState } from "../../store/reducers/modal/modal";
+import styles from "./sidebar-item.module.css";
+
+interface ISidebarItemProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  id: string;
+  label: string;
+  descritiption: string;
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref">>;
+}
+
+const SidebarItem = ({
+  id,
+  label,
+  descritiption,
+  icon: Icon,
+  ...props
+}: ISidebarItemProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const currentModalId = useSelector((state: RootState) => state.modal.id);
+  const currentPage = location.pathname;
+  const normalizePath = currentPage.replace(/^\/+/, "");
+  const isActive = normalizePath === id || currentModalId === id;
+
+  const dispatch = useAppDispatch();
+  const icon = <Icon size={20} />;
+  function handleSidebarItemClick(id: string) {
+    switch (id) {
+      case "goals":
+        navigate("/goals");
+        break;
+      case "collections":
+        navigate("/collections");
+        break;
+      case "transactions":
+        navigate("/transactions");
+        break;
+      case "wallet":
+        navigate("/wallet");
+        break;
+      case "activities":
+        navigate("/activities");
+        break;
+      case "search":
+        navigate("/search");
+        break;
+      case "create":
+        dispatch(openModalState({ id: "create" }));
+        break;
+      case "info":
+        navigate("/info");
+        break;
+      case "home":
+        navigate("/home");
+        break;
+    }
+  }
+
+  return (
+    <li className={styles.sidebarItem} data-active={isActive}>
+      <button
+        id={`sidebar-item-${id}`}
+        title={label}
+        aria-label={descritiption}
+        {...props}
+        onClick={() => handleSidebarItemClick(id)}
+      >
+        {id === "home" ? <div>{icon}</div> : icon}
+      </button>
+    </li>
+  );
+};
+
+export default SidebarItem;

@@ -1,0 +1,31 @@
+.recurrenceDaySelectorItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid var(--ne-c4);
+  background-color: var(--ne-c7);
+  cursor: pointer;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-md);
+  user-select: none;
+}
+
+.recurrenceDaySelectorItem:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c8);
+}
+
+.recurrenceDaySelectorItem[data-selected="true"] {
+  color: var(--ne-c11);
+  border-color: var(--ne-c11);
+  background-color: var(--ne-c8);
+}
+
+.recurrenceDaySelectorItem[data-selected="true"]:focus,
+.recurrenceDaySelectorItem:focus {
+  border-color: var(--ne-c12);
+  box-shadow: none !important;
+}

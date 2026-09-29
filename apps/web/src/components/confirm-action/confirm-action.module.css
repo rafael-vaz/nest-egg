@@ -1,0 +1,8 @@
+.confirmActionContainer {
+  color: var(--ne-c2);
+}
+
+.confirmActionContainer p {
+  color: var(--ne-c2);
+  margin: 1.875rem 0;
+}

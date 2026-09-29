@@ -1,0 +1,53 @@
+.toolMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 100%;
+  max-width: 18.75rem;
+  box-shadow: var(--shadow-lg);
+  background-color: var(--ne-c9);
+  color: var(--ne-c2);
+  z-index: 3;
+}
+
+.toolMenu[data-active="true"] {
+  animation: slideToRight 0.3s forwards;
+}
+
+.toolMenu[data-active="false"] {
+  animation: slideToLeft 0.3s forwards;
+}
+
+.toolMenuContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  overflow-y: auto;
+  max-height: calc(100dvh - 3.5625rem);
+}
+
+@media (max-width: 31.25rem) {
+  .toolMenu {
+    max-width: 100%;
+  }
+}
+
+@keyframes slideToRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideToLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}

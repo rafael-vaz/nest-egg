@@ -1,0 +1,29 @@
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.logoImg {
+  height: auto;
+  width: 5rem;
+}
+
+.logoTitle {
+  font-family: var(--title-font);
+  font-size: 2rem;
+  color: var(--ne-c2);
+}
+
+@media (max-width: 31.25rem) {
+  .logoImg {
+    height: auto;
+    width: 4.375rem;
+  }
+  .logoTitle {
+    font-size: 1.75rem;
+  }
+}

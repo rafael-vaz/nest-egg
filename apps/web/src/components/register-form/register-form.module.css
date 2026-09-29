@@ -1,0 +1,25 @@
+.registerForm {
+  color: var(--ne-c2);
+}
+
+.registerForm p {
+  color: var(--ne-c2);
+}
+
+.loginInvite {
+  font-family: var(--content-font);
+  font-size: 0.875rem;
+  color: var(--ne-c2);
+  text-align: center;
+  margin: 0;
+}
+
+.loginInvite a {
+  text-decoration: none;
+  color: var(--ne-c11);
+  cursor: pointer;
+}
+
+.loginInvite a:hover {
+  text-decoration: underline;
+}

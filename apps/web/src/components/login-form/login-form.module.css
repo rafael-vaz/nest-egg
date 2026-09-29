@@ -1,0 +1,50 @@
+.loginForm {
+  color: var(--ne-c2);
+}
+
+.loginForm p {
+  text-align: center;
+  color: var(--ne-c2);
+}
+
+.passwordContainer {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.625rem;
+  margin-bottom: 1.25rem;
+}
+
+.lostPassword {
+  width: max-content;
+  text-align: end;
+  font-size: 0.875rem;
+  font-family: var(--content-font);
+  color: var(--ne-c4);
+  cursor: pointer;
+}
+
+.lostPassword:hover {
+  color: var(--ne-c11);
+  text-decoration: underline;
+}
+
+.registerInvite {
+  font-family: var(--content-font);
+  font-size: 0.875rem;
+  color: var(--ne-c2);
+  text-align: center;
+  margin: 0;
+}
+
+.registerInvite a {
+  text-decoration: none;
+  color: var(--ne-c11);
+  cursor: pointer;
+}
+
+.registerInvite a:hover {
+  text-decoration: underline;
+}

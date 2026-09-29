@@ -1,0 +1,42 @@
+.profileCard {
+  height: auto;
+  width: 100%;
+  background-color: var(--ne-c8);
+  border-radius: 0.625rem;
+  padding: 0.875rem;
+}
+
+.profileCardHeader {
+  margin-bottom: 0.625rem;
+}
+
+.profileCardTitle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.625rem;
+  font-family: var(--title-font);
+  font-size: 1rem;
+  font-weight: var(--regular);
+  color: var(--ne-c2);
+}
+
+.profileCardTitle svg {
+  color: var(--ne-c11);
+}
+
+.profileCardValue {
+  padding: 0.625rem;
+  background-color: var(--ne-c7);
+  border-radius: 0.625rem;
+}
+
+.profileCardValue span {
+  display: block;
+  width: 100%;
+  font-family: var(--title-font);
+  color: var(--ne-c2);
+  font-size: 1rem;
+  text-align: center;
+  text-align-last: center;
+}

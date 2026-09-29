@@ -1,0 +1,22 @@
+.statusTag {
+  width: max-content;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--ne-c6);
+  background-color: var(--ne-c8);
+}
+
+.statusTag p {
+  color: var(--ne-c2);
+  font-size: 0.75rem;
+  margin: 0;
+  line-height: 1;
+}
+
+.statusTag svg {
+  color: var(--ne-c12);
+}

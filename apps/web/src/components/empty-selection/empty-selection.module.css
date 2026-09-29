@@ -1,0 +1,14 @@
+.emptySelection {
+  border: 1px dashed var(--ne-c5);
+  font-family: var(--content-font);
+  font-size: 1rem;
+  color: var(--ne-c4);
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+}
+
+.emptySelection p {
+  text-align: center;
+  text-align-last: center;
+  margin: 0;
+}

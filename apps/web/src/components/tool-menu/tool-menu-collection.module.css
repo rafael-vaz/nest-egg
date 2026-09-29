@@ -1,0 +1,27 @@
+.toolMenuCollection {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  margin: 0.625rem 0;
+}
+
+.toolMenuCollection:focus {
+  box-shadow: none !important;
+  outline: 1px solid var(--ne-c12);
+}
+
+.toolMenuCollectionTitle {
+  font-family: var(--title-font);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--ne-c2);
+  border-left: 2px solid var(--ne-c11);
+  padding-left: 0.625rem;
+  margin: 0 0 0.625rem 0;
+}
+
+.toolMenuCollectionContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.625rem;
+}

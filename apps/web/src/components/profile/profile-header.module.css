@@ -1,0 +1,86 @@
+.profileHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.profileHeaderButtons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  padding: 1.25rem;
+  width: 100%;
+}
+
+.profileHeaderCover {
+  height: 10rem;
+  width: 100%;
+  overflow: hidden;
+}
+
+.profileHeaderCover img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+.profileHeaderUserPhotoContainer {
+  position: absolute;
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateY(-50%);
+}
+
+.profileHeaderUserPhoto {
+  position: relative;
+  height: 7.5rem;
+  width: 7.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--ne-c7);
+  overflow: hidden;
+}
+
+.profileHeaderUserPhotoControls[data-loading="true"],
+.profileHeaderUserPhoto:focus-within .profileHeaderUserPhotoControls,
+.profileHeaderUserPhoto:hover .profileHeaderUserPhotoControls {
+  display: flex;
+}
+
+.profileHeaderUserPhotoControls {
+  display: none;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.profileHeaderUserPhoto img {
+  height: 100%;
+  width: 100%;
+  border: 0.25rem solid var(--ne-c7);
+  border-radius: 50%;
+}
+
+@media (max-width: 31.25rem) {
+  .profileHeaderCover {
+    height: 7.5rem;
+  }
+  .profileHeaderUserPhoto {
+    height: 6.25rem;
+    width: 6.25rem;
+  }
+}

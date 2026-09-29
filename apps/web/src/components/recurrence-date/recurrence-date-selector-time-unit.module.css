@@ -1,0 +1,11 @@
+.recurrenceDateSelectorTimeUnit {
+  height: auto;
+  width: 100%;
+}
+
+.recurrenceDateSelectorTimeUnitContent {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  place-items: center;
+  gap: 0.625rem;
+}

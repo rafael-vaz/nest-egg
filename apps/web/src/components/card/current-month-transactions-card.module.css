@@ -1,0 +1,23 @@
+.currentMonthTransactionsCardMainContent {
+  margin-bottom: 1.25rem;
+}
+
+.currentMonthTransactionsCardTitle {
+  margin-bottom: 0.375rem;
+}
+
+.currentMonthTransactionsCardLastUpdate,
+.currentMonthTransactionsCardRecurringTransactions {
+  margin: 0;
+  font-family: var(--content-font);
+  font-size: 0.75rem;
+}
+
+.currentMonthTransactionsCardRecurringTransactions {
+  font-weight: var(--medium);
+  color: var(--ne-c3);
+}
+
+.currentMonthTransactionsCardLastUpdate {
+  color: var(--ne-c5);
+}

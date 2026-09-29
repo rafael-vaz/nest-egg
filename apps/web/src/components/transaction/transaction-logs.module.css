@@ -1,0 +1,65 @@
+.transactionLogsContainer {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+.transactionLogs {
+  max-height: 10rem;
+  width: 100%;
+  padding: 0.625rem;
+  font-family: var(--content-font);
+  color: var(--ne-c2);
+  border-radius: 0.625rem;
+  background-color: var(--ne-c8);
+  border: 0.0625rem solid var(--ne-c6);
+  overflow-y: auto;
+}
+
+.transactionLogsList {
+  list-style: none;
+}
+
+.transactionEmptyLogs {
+  color: var(--ne-c3);
+  margin: 0.375rem 0;
+}
+
+.transactionLogsItem {
+  padding: 0.375rem 0;
+}
+
+.transactionLogsItem + .transactionLogsItem {
+  border-top: 1px solid var(--ne-c6);
+}
+
+.transactionLogsItem span {
+  display: block;
+  font-size: 0.625rem;
+  color: var(--ne-c4);
+  margin-bottom: 0.25rem;
+}
+
+.transactionLogsItem ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+}
+
+.transactionLogsItem li {
+  font-size: 0.75rem;
+  color: var(--ne-c2);
+  margin: 0;
+}
+
+.transactionLogsItem li[data-type="debt"] {
+  color: var(--error);
+}
+
+.transactionLogsItem li[data-type="credit"] {
+  color: var(--success);
+}

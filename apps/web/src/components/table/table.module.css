@@ -1,0 +1,18 @@
+.table {
+  height: auto;
+  width: 100%;
+  font-size: 1rem;
+  font-family: var(--content-font);
+  text-align: center;
+  text-align-last: center;
+  color: var(--ne-c2);
+  border-collapse: collapse;
+  border-radius: 0.625rem;
+  overflow: auto;
+}
+
+.tableWrapper {
+  width: 100%;
+  max-height: 37.5rem;
+  overflow: auto;
+}

@@ -1,0 +1,32 @@
+.grid {
+  display: grid;
+  place-items: start;
+  gap: 1.25rem;
+}
+
+.grid,
+.grid[data-columns="2"] {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid[data-columns="3"] {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 37.5rem) {
+  .grid[data-columns="3"] {
+    grid-template-columns: 1fr;
+  }
+  .grid[data-columns="3"].noRowGap {
+    row-gap: 0;
+  }
+}
+
+@media (max-width: 31.25rem) {
+  .grid,
+  .grid[data-columns="2"] {
+    grid-template-columns: 1fr;
+  }
+  .noRowGap {
+    row-gap: 0;
+  }
+}

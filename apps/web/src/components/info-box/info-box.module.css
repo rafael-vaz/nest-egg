@@ -1,0 +1,32 @@
+.infoBoxContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  flex-direction: column;
+  height: auto;
+  width: auto;
+}
+
+.infoBoxContent {
+  position: absolute;
+  top: 2.875rem;
+  width: max-content;
+  padding: 0.625rem;
+  max-width: 12.5rem;
+  border: 1px solid var(--ne-c5);
+  background-color: var(--ne-c7);
+  border-radius: 0.625rem;
+  box-shadow: var(--shadow-md);
+  font-size: 0.75rem;
+  color: var(--ne-c3);
+  z-index: 2;
+}
+
+.infoBoxContainer:has([data-size="x-small"]) .infoBoxContent {
+  top: 1.875rem;
+}
+
+.infoBoxContent p {
+  margin: 0;
+}

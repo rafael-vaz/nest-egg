@@ -1,0 +1,28 @@
+.walletBalanceCardMainContent {
+  margin-bottom: 1.25rem;
+}
+
+.walletBalanceCardLastUpdate,
+.walletBalanceCardLastTransaction {
+  margin: 0;
+  font-family: var(--content-font);
+  font-size: 0.75rem;
+}
+
+.walletBalanceCardLastTransaction {
+  font-weight: var(--medium);
+  color: var(--ne-c3);
+}
+
+.walletBalanceCardTitle {
+  font-weight: var(--bold);
+}
+
+.walletBalanceCardLastUpdate {
+  color: var(--ne-c5);
+}
+
+.walletBalanceCardLastTransaction .value[data-type="debt"],
+.walletBalanceCardLastTransaction .value[data-type="credit"] {
+  color: var(--success);
+}

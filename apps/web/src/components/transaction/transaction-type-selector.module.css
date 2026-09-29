@@ -1,0 +1,52 @@
+.transactionTypeSelector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  overflow: hidden;
+  border-radius: 0.625rem;
+  background-color: var(--ne-c7);
+  border: 1px solid var(--ne-c6);
+}
+
+.transactionTypeSelector:focus {
+  box-shadow: none !important;
+  border-color: var(--ne-c12);
+}
+
+.transactionTypeSelectorOption {
+  height: 2.25rem;
+  min-width: 6.25rem;
+  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1rem;
+  color: var(--ne-c2);
+  padding: 0.625rem;
+  cursor: pointer;
+  background-color: var(--ne-c7);
+}
+
+.transactionTypeSelectorOption:focus {
+  box-shadow: none !important;
+}
+
+.transactionTypeSelectorOption + .transactionTypeSelectorOption {
+  border-left: 1px solid var(--ne-c6);
+}
+
+.transactionTypeSelectorOption[data-selected="true"] {
+  background-color: var(--ne-c8);
+}
+
+.transactionTypeSelectorOption[id="credit"] svg {
+  color: var(--success);
+}
+.transactionTypeSelectorOption[id="debt"] svg {
+  color: var(--error);
+}
+.transactionTypeSelectorOption[id="all"] svg {
+  color: var(--ne-c11);
+}

@@ -1,0 +1,31 @@
+.goalSelectorAddListContainer {
+  position: absolute;
+  top: 2.875rem;
+  right: 0;
+  height: auto;
+  width: 100%;
+  background-color: var(--ne-c7);
+  border: 1px solid var(--ne-c5);
+  border-radius: 0.625rem;
+  min-width: max-content;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  z-index: 2;
+}
+
+.goalSelectorAddListContainer:focus {
+  box-shadow: 0 0 0 0.0625rem var(--ne-c12) !important;
+}
+
+.goalSelectorAddList {
+  width: 100%;
+  max-height: 13.125rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.goalSelectorAddListSearch input {
+  border-radius: 0.625rem 0.625rem 0 0;
+  border: 0;
+  border-bottom: 0.0625rem solid var(--ne-c5);
+}

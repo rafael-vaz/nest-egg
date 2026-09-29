@@ -1,0 +1,63 @@
+.datePickerContainer {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.datePickerElement {
+  height: 2.25rem;
+  min-width: 6.25rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  padding-left: 2rem !important;
+  border-radius: 0.625rem;
+  color: var(--ne-c2);
+  border: 1px solid var(--ne-c6);
+  outline: none;
+  font-family: var(--content-font);
+  font-size: 1rem;
+  background-color: var(--ne-c8);
+  cursor: pointer;
+}
+
+.datePickerElement[disabled] {
+  cursor: not-allowed;
+}
+
+.datePickerElementHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.datePickerElementHeadTitle {
+  font-family: var(--title-font);
+  font-weight: var(--semibold);
+  font-size: 1rem;
+  color: var(--ne-c2);
+}
+
+.datePickerElementHeadButton {
+  padding: 0.375rem;
+  border-radius: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: var(--ne-c7);
+  color: var(--ne-c11);
+  cursor: pointer;
+}
+
+.datePickerElementHeadButton:hover {
+  background-color: var(--ne-c8);
+}
+
+.datePickerElementHeadButton:disabled {
+  color: var(--ne-c5);
+  cursor: not-allowed;
+}
+
+.hasNoMargin {
+  margin: 0;
+}

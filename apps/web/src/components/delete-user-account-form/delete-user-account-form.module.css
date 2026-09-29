@@ -1,0 +1,11 @@
+.deleteUserAccountForm {
+  color: var(--ne-c2);
+}
+
+.deleteUserAccountForm p {
+  color: var(--ne-c2);
+}
+
+.deleteUserAccountFormButtons {
+  margin-top: 1.25rem;
+}

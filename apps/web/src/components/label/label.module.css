@@ -1,0 +1,28 @@
+.labelContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.label {
+  display: inline-block;
+  font-family: var(--content-font);
+  font-size: 1rem;
+  color: var(--ne-c2);
+}
+
+.opcional {
+  font-size: 0.75rem;
+  color: var(--ne-c5);
+  margin-left: 0.5rem;
+}
+
+.counter {
+  color: var(--ne-c5);
+  margin-left: 0.5rem;
+}
+
+.labelContainer[data-has-margin="true"] {
+  margin-bottom: 0.625rem;
+}

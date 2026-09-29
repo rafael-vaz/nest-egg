@@ -1,0 +1,45 @@
+.inputEditField {
+  width: 100%;
+  font-family: var(--content-font);
+  color: var(--ne-c2);
+  border: none;
+  background-color: transparent;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.inputEditField:focus {
+  box-shadow: none !important;
+}
+
+.inputEditFieldContainer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  width: 100%;
+  border-bottom: 0.0625rem solid transparent;
+  margin-bottom: 0.375rem;
+}
+
+.inputEditFieldContainer[data-active-edit="true"],
+.inputEditFieldContainer:hover {
+  transition: 0.2s;
+  border-color: var(--ne-c6);
+}
+
+.inputEditFieldControlContainer {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  gap: 0.25rem;
+  position: relative;
+  width: 100%;
+}
+
+.inputEditFieldConfirmButton {
+  color: var(--ne-c12);
+}
+
+.inputEditFieldEditButton {
+  color: var(--ne-c5);
+}

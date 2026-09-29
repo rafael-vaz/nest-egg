@@ -1,0 +1,14 @@
+.toolMenuEmptyList {
+  padding: 0.625rem;
+  font-size: 0.875rem;
+  width: 100%;
+  color: var(--ne-c3);
+  border: 1px solid var(--ne-c8);
+  border-radius: 0.625rem;
+  text-align: center;
+  text-align-last: center;
+}
+
+.toolMenuEmptyList p {
+  margin: 0;
+}

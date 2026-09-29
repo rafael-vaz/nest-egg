@@ -1,0 +1,10 @@
+.collectionSelectorAddEmptyList {
+  padding: 0.625rem;
+  font-size: 0.75rem;
+  max-width: 12.5rem;
+  color: var(--ne-c3);
+}
+
+.collectionSelectorAddEmptyList p {
+  margin: 0;
+}

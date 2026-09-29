@@ -1,0 +1,76 @@
+.goalSelectorAddListItem {
+  max-width: 18.75rem;
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  font-size: 0.75rem;
+  color: var(--ne-c2);
+  cursor: pointer;
+}
+
+.goalSelectorAddListItem:focus,
+.goalSelectorAddListItem:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c8);
+}
+
+.goalSelectorAddListItem + .goalSelectorAddListItem {
+  border-top: 1px solid var(--ne-c5);
+}
+
+.goalSelectorAddListItemContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.goalSelectorAddListItemName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.375rem;
+  font-weight: var(--medium);
+  margin: 0;
+}
+
+.goalSelectorAddListItemValue {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 0.625rem;
+  color: var(--ne-c4);
+  gap: 0.375rem;
+  margin: 0;
+}
+
+.goalSelectorAddListItemSelectionButton[data-selected="true"] svg {
+  color: var(--success);
+}
+
+.goalSelectorAddListItemSelectionButton {
+  color: var(--ne-c4);
+}
+
+.goalSelectorAddListItemSelectionButton:hover {
+  color: var(--ne-c2);
+}
+
+.goalSelectorAddListItemStatus {
+  color: var(--ne-c4);
+}
+.goalSelectorAddListItemStatus[data-status="active"] {
+  color: var(--info);
+}
+.goalSelectorAddListItemStatus[data-status="waiting"] {
+  color: var(--alert);
+}
+.goalSelectorAddListItemStatus[data-status="completed"] {
+  color: var(--success);
+}
+.goalSelectorAddListItemStatus[data-status="confirm"] {
+  color: var(--ne-c11);
+}

@@ -1,0 +1,7 @@
+.tableHeader {
+  position: sticky;
+  top: -1px;
+  font-weight: var(--medium);
+  background-color: var(--ne-c8);
+  z-index: 1;
+}

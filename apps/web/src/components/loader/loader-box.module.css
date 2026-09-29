@@ -1,0 +1,14 @@
+.loaderBox {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.loaderBox p {
+  margin: 0;
+  font-size: 1.125rem;
+  color: var(--ne-c2);
+}

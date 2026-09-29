@@ -1,0 +1,23 @@
+.topbar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.25rem;
+}
+
+.topbarButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+@media (max-width: 50rem) {
+  .topbarButtons {
+    gap: 0.625rem;
+  }
+  .topbarButtons button span {
+    display: none;
+  }
+}

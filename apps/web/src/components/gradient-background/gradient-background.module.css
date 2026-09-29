@@ -1,0 +1,8 @@
+.gradientBackground {
+  height: 100dvh;
+  width: 100dvw;
+  background: url("../../assets/img/covers/gradient-cover.webp");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}

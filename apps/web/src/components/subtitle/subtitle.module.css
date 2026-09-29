@@ -1,0 +1,29 @@
+.subtitle {
+  font-family: var(--title-font);
+  font-weight: var(--bold);
+  font-size: 1.625rem;
+  color: var(--ne-c2);
+}
+
+.subtitle svg {
+  color: var(--ne-c11);
+}
+
+.subtitle[data-variants="marked"] {
+  border-left: 0.25rem solid var(--ne-c12);
+  padding-left: 0.625rem;
+}
+
+.subtitle[data-align="right"] {
+  text-align: right;
+}
+
+.subtitle[data-align="center"] {
+  text-align: center;
+}
+
+@media (max-width: 31.25rem) {
+  .subtitle {
+    font-size: 1.375rem;
+  }
+}

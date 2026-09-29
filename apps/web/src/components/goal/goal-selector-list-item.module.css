@@ -1,0 +1,8 @@
+.goalSelectorListItemRemoveButton {
+  margin: 0 auto;
+}
+
+.goalSelectorListItemRemoveButton:hover {
+  background-color: var(--error);
+  color: var(--ne-c2);
+}

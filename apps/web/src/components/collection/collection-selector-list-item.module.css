@@ -1,0 +1,8 @@
+.collectionSelectorListItemRemoveButton {
+  margin: 0 auto;
+}
+
+.collectionSelectorListItemRemoveButton:hover {
+  background-color: var(--error);
+  color: var(--ne-c2);
+}

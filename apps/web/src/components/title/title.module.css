@@ -1,0 +1,24 @@
+.title {
+  font-family: var(--title-font);
+  font-weight: var(--bold);
+  font-size: 2rem;
+  color: var(--ne-c2);
+}
+
+.title svg {
+  color: var(--ne-c11);
+}
+
+.title[data-align="right"] {
+  text-align: right;
+}
+
+.title[data-align="center"] {
+  text-align: center;
+}
+
+@media (max-width: 31.25rem) {
+  .title {
+    font-size: 1.75rem;
+  }
+}

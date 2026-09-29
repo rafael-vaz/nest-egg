@@ -1,0 +1,71 @@
+.userCard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.625rem;
+  background-color: var(--ne-c9);
+  border-radius: 0.625rem;
+  width: max-content;
+}
+
+.userCardPhoto {
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.userCardPhoto img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.userCardText {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.userCardText p {
+  font-family: var(--content-font);
+  font-size: 1rem;
+  color: var(--ne-c2);
+  margin: 0;
+  max-width: 8.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userCardTextProfileButton {
+  color: var(--ne-c11);
+  outline: none;
+  border: none;
+  background-color: transparent;
+  text-decoration: underline;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.userCardTextProfileButton:hover {
+  transition: 0.2s;
+  color: var(--ne-c12);
+}
+
+@media (max-width: 50rem) {
+  .userCardText {
+    display: none;
+  }
+}
+
+@media (max-width: 21.875rem) {
+  .userCard {
+    display: none;
+  }
+}

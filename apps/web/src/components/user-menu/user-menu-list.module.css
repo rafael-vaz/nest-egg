@@ -1,0 +1,48 @@
+.userMenuList {
+  position: absolute;
+  bottom: 0;
+  left: 3.75rem;
+  height: auto;
+  width: max-content;
+  max-width: 18.75rem;
+  background-color: var(--ne-c8);
+  border-radius: 0.625rem;
+  box-shadow: var(--shadow-md);
+  font-family: var(--content-font);
+  font-size: 1rem;
+  color: var(--ne-c2);
+  overflow: hidden;
+  border: 1px solid var(--ne-c6);
+  z-index: 2;
+}
+
+.userMenuList:focus {
+  box-shadow: none !important;
+  border-color: var(--ne-c12);
+}
+
+.userMenuListItem button {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  cursor: pointer;
+  user-select: none;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--content-font);
+  font-size: 1rem;
+  color: var(--ne-c2);
+}
+
+.userMenuListItem:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c7);
+}
+
+.userMenuListItem + .userMenuListItem {
+  border-top: 0.0625rem solid var(--ne-c6);
+}

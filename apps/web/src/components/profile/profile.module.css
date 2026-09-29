@@ -1,0 +1,11 @@
+.profile {
+  height: auto;
+  width: 100%;
+  padding-top: 13.125rem;
+}
+
+@media (max-width: 31.25rem) {
+  .profile {
+    padding-top: 10.75rem;
+  }
+}

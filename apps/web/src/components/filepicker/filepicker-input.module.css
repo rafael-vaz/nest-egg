@@ -1,0 +1,61 @@
+.filepickerInputContainer {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.filepickerInput {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.375rem;
+  height: 2.1875rem;
+  min-width: 6.25rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  padding-right: 2.5rem;
+  border-radius: 0.25rem;
+  color: var(--ne-c2);
+  outline: none;
+  font-family: var(--content-font);
+  font-size: 1rem;
+  background-color: var(--ne-c7);
+  cursor: pointer;
+}
+
+.filepickerInputButton {
+  height: 1.5rem;
+  width: 1.5rem;
+  position: absolute;
+  right: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  border: none;
+  padding: 0.25rem;
+  color: var(--ne-c10);
+  background-color: var(--ne-c6);
+}
+
+button.filepickerInputButton {
+  color: var(--ne-c2);
+}
+
+.filepickerInputButton:hover {
+  transition: 0.2s;
+  background-color: var(--ne-c5);
+}
+
+.filepickerInputButton input {
+  display: none;
+}
+
+.filepickerInputValue {
+  width: 100%;
+  font-size: 1rem;
+  font-family: var(--content-font);
+  color: var(--ne-c2);
+}

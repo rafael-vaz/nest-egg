@@ -1,0 +1,24 @@
+.percentageProgress {
+  height: 2.25rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  min-width: 12.5rem;
+  background-color: var(--ne-c8);
+  border-radius: 0.625rem;
+  border: 1px solid var(--ne-c6);
+  gap: 0.875rem;
+  padding: 0 1rem;
+}
+
+.percentageProgressLabel {
+  display: block;
+  text-align: center;
+  text-align-last: center;
+  min-width: 2.1875rem;
+  font-size: 0.875rem;
+  font-family: var(--content-font);
+  color: var(--ne-c2);
+}

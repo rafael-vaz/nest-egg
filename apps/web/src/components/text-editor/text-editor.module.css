@@ -1,0 +1,14 @@
+.textEditorContainer {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.textEditorSkeleton {
+  height: 6.25rem;
+  width: 100%;
+  border-radius: 0.625rem;
+}
+
+.textEditorContainer [data-loading-state="true"] {
+  display: none;
+}

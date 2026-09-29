@@ -1,0 +1,15 @@
+.toolMenuButton {
+  display: none;
+  position: fixed;
+  top: 5rem;
+  left: 0;
+  opacity: 0.5;
+  border-radius: 0 0.625rem 0.625rem 0;
+  z-index: 2;
+}
+
+@media (max-width: 31.25rem) {
+  .toolMenuButton {
+    display: flex;
+  }
+}

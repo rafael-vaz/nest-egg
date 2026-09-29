@@ -1,0 +1,18 @@
+.tableDataCell {
+  padding: 0.5rem;
+  border: 0.0625rem solid var(--ne-c6);
+  max-width: 10rem;
+}
+
+.tableDataCell[data-status="active"] {
+  color: var(--info);
+}
+.tableDataCell[data-status="waiting"] {
+  color: var(--alert);
+}
+.tableDataCell[data-status="completed"] {
+  color: var(--success);
+}
+.tableDataCell[data-status="confirm"] {
+  color: var(--ne-c11);
+}

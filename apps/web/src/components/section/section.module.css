@@ -1,0 +1,35 @@
+.section {
+  width: 100%;
+  margin: 2.25rem 0;
+}
+
+.sectionContent {
+  height: auto;
+  width: 100%;
+  margin: 1.25rem 0;
+}
+
+.sectionContentList {
+  list-style: none;
+  display: flex;
+  justify-content: start;
+  align-items: top;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.sectionContentList li {
+  flex-grow: 1;
+  width: 100%;
+  min-height: max-content;
+}
+
+.smallBasis li {
+  flex-basis: 15.625rem;
+}
+.mediumBasis li {
+  flex-basis: 20rem;
+}
+.largeBasis li {
+  flex-basis: 21.875rem;
+}

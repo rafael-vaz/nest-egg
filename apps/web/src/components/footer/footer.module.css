@@ -1,0 +1,28 @@
+.footer {
+  position: relative;
+  width: 100%;
+  background-color: var(--ne-c7);
+  padding: 1.25rem 0.625rem;
+  color: var(--ne-c2);
+  font-family: var(--title-font);
+  font-family: 1rem;
+  text-align: center;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.footer p span {
+  color: var(--ne-c12);
+}
+
+.footer[data-position="absolute"] {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.footer[data-background-style="transparent"] {
+  background-color: transparent;
+}

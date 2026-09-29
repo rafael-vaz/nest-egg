@@ -1,0 +1,83 @@
+.profileCoverMenuListItem {
+  position: relative;
+  height: 5rem;
+  width: 100%;
+  max-width: 12.5rem;
+  border-radius: 0.625rem;
+  overflow: hidden;
+  cursor: pointer;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-family: var(--content-font);
+  border: 1px solid transparent;
+}
+
+.profileCoverMenuListItem:focus,
+.profileCoverMenuListItem:hover {
+  transition: 0.2s;
+  border-color: var(--ne-c4);
+}
+
+.profileCoverMenuListItem img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.profileCoverMenuListItemSkeleton {
+  height: 100%;
+  width: 100%;
+}
+
+.profileCoverMenuListItem[data-loading-state="true"] img {
+  display: none;
+}
+
+.profileCoverMenuListItem:not([data-selected="true"]):hover img {
+  filter: brightness(0.7);
+}
+
+.profileCoverMenuListItem:not([data-selected="true"]):not(
+    [data-loading-state="true"]
+  ):focus:before,
+.profileCoverMenuListItem:not([data-selected="true"]):not(
+    [data-loading-state="true"]
+  ):hover:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  content: "Selecionar";
+  display: block;
+  color: var(--ne-c2);
+  z-index: 1;
+}
+
+.profileCoverMenuListItem[data-selected="true"] {
+  border-color: var(--ne-c12);
+}
+
+.profileCoverMenuListItem[data-selected="true"] img {
+  filter: brightness(0.4);
+}
+
+.profileCoverMenuListItem[data-selected="true"]:not(
+    [data-loading-state="true"]
+  )[data-loading-state="true"]
+  img {
+  display: none;
+}
+
+.profileCoverMenuListItem[data-selected="true"]:not(
+    [data-loading-state="true"]
+  ):before {
+  content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMxNWY1YmEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBjbGFzcz0ibHVjaWRlIGx1Y2lkZS1jaXJjbGUtY2hlY2stYmlnLWljb24gbHVjaWRlLWNpcmNsZS1jaGVjay1iaWciPjxwYXRoIGQ9Ik0yMS44MDEgMTBBMTAgMTAgMCAxIDEgMTcgMy4zMzUiLz48cGF0aCBkPSJtOSAxMSAzIDNMMjIgNCIvPjwvc3ZnPg==");
+  position: absolute;
+  height: 1.25rem;
+  width: 1.25rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}

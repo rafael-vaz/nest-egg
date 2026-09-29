@@ -1,0 +1,20 @@
+.inputWarningText {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  font-family: var(--content-font);
+  color: var(--ne-c2);
+  margin-top: 0.625rem;
+}
+
+.inputWarningText[data-type="error"] {
+  color: var(--error);
+}
+.inputWarningText[data-type="success"] {
+  color: var(--success);
+}
+.inputWarningText[data-type="alert"] {
+  color: var(--alert);
+}

@@ -1,0 +1,44 @@
+.circularProgressCardMainContent {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.circularProgressCardInfoList {
+  list-style: none;
+  font-size: 0.75rem;
+  font-family: var(--content-font);
+  color: var(--ne-c2);
+  line-height: 1.6;
+}
+
+.circularProgressCardInfoList .name {
+  font-size: 0.875rem;
+  color: var(--ne-c2);
+  font-weight: var(--medium);
+}
+
+.circularProgressCardInfoList .time,
+.circularProgressCardInfoList .progress {
+  color: var(--ne-c3);
+}
+
+.circularProgressLink,
+.circularProgressCardLastUpdate {
+  font-size: 0.75rem;
+  color: var(--ne-c5);
+}
+
+.circularProgressLink {
+  font-weight: var(--regular);
+  text-decoration: none;
+}
+
+.circularProgressLink:hover {
+  transition: 0.2s;
+  color: var(--ne-c11);
+  text-decoration: underline;
+}
