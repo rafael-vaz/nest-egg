@@ -56,8 +56,10 @@ uma tipagem que serve ao seu próprio código.
   `apps/web/src/@types/recurrence-date/index.ts` importam de
   `@nest-egg/shared-types`, mas continuam exportando os mesmos nomes de
   sempre — nenhum dos 23 arquivos que os consomem precisou mudar.
-- `apps/functions/src/recurrence/types.ts` faz o mesmo pelos seus 3
-  consumidores (`engine.ts`, `cron.ts`, `transactions.ts`).
+- `apps/functions/src/recurrence/types.ts` fazia o mesmo pelos seus 3
+  consumidores (`engine.ts`, `cron.ts`, `transactions.ts`) — revertido em
+  [`0004-functions-drop-shared-types.md`](0004-functions-drop-shared-types.md)
+  por uma limitação de infraestrutura de deploy, não por divergência de tipo.
 - Se, no futuro, os dois lados decidirem deliberadamente tratar datas de
   recorrência da mesma forma (por exemplo, ao implementar a feature da
   carteira, que vai mexer nesses mesmos triggers), essa unificação é uma

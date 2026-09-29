@@ -1,10 +1,11 @@
-import type {
-  FrequencyCategory,
-  FrequencyOrder,
-  TransactionType,
-} from "@nest-egg/shared-types";
-
-export type {FrequencyCategory, FrequencyOrder, TransactionType};
+// Defined locally, not imported from @nest-egg/shared-types: Cloud
+// Functions' deploy environment runs `npm install` with no npm-workspace
+// context, so it cannot resolve a workspace-internal package under any
+// dependency type (confirmed by two failed production deploys) — see
+// docs/decisions/0003-shared-types-scope.md.
+export type FrequencyCategory = "day" | "week" | "month" | "year";
+export type FrequencyOrder = "day-number" | "week-order" | null;
+export type TransactionType = "credit" | "debt";
 
 export interface IFrequency {
   rate: number;
