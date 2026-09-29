@@ -82,10 +82,18 @@ async function processTransactionRecurrence(
     const normalizedNow = new Date(now);
     normalizedNow.setHours(0, 0, 0, 0);
 
-    let currentDate = new Date(tx.date);
+    const existingLog = tx.occurrenceLog || [];
+
+    // With no recorded history, rebuild from the recurrence's true start
+    // date instead of the `tx.date` pointer — otherwise a log that got reset
+    // (e.g. by an unrelated edit resetting occurrenceLog client-side) would
+    // only pick up occurrences going forward and reconcileWallet would read
+    // that truncated log as "the earlier ones no longer happened".
+    let currentDate = existingLog.length > 0 ?
+      new Date(tx.date) :
+      new Date(tx.recurrence.startDate);
     currentDate.setHours(0, 0, 0, 0);
 
-    const existingLog = tx.occurrenceLog || [];
     const newOccurrences: typeof existingLog = [];
     let nextFutureDate: Date | null = null;
 
@@ -182,7 +190,12 @@ export const processRecurrences = onSchedule(
     });
 
     for (const doc of recurringSnap.docs) {
-      await processTransactionRecurrence(doc, now);
+      try {
+        await processTransactionRecurrence(doc, now);
+      } catch {
+        // Already logged with context inside processTransactionRecurrence;
+        // one bad transaction must not stop the rest of the batch.
+      }
     }
 
     // Process single-occurrence transactions
@@ -196,7 +209,12 @@ export const processRecurrences = onSchedule(
     });
 
     for (const doc of singleSnap.docs) {
-      await processSingleOccurrence(doc, now);
+      try {
+        await processSingleOccurrence(doc, now);
+      } catch {
+        // Already logged with context inside processSingleOccurrence;
+        // one bad transaction must not stop the rest of the batch.
+      }
     }
   },
 );
