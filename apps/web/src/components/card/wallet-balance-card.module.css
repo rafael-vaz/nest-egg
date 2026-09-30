@@ -22,7 +22,10 @@
   color: var(--ne-c5);
 }
 
-.walletBalanceCardLastTransaction .value[data-type="debt"],
+.walletBalanceCardLastTransaction .value[data-type="debt"] {
+  color: var(--error);
+}
+
 .walletBalanceCardLastTransaction .value[data-type="credit"] {
   color: var(--success);
 }
