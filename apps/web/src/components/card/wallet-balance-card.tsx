@@ -3,11 +3,13 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
+import { ITransactionOccurrenceLog } from "../../@types/transaction";
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { updateAuthUser } from "../../store/reducers/user/user-auth";
 import { setLoading } from "../../store/reducers/user/user-finances";
 import { updateUserThunk } from "../../store/thunks/user/user-data";
 import formatRelativeDate from "../../utils/date/format-relative-date";
+import sortByKey from "../../utils/sort-by-key";
 import formatCurrency from "../../utils/text/format-currency";
 import formatCurrencyInput from "../../utils/text/format-currency-input";
 import parseCurrency from "../../utils/text/parse-currency";
@@ -20,6 +22,19 @@ const WalletBalanceCard = () => {
   const [walletValue, setWalletValue] = React.useState(0);
 
   const { authUser } = useSelector((state: RootState) => state.userAuth);
+  const { transactions } = useSelector(
+    (state: RootState) => state.userFinances,
+  );
+
+  const lastOccurrence = React.useMemo(() => {
+    const occurrences = transactions.flatMap(
+      (transaction) => transaction.occurrenceLog ?? [],
+    );
+    if (occurrences.length === 0) return null;
+    return sortByKey<ITransactionOccurrenceLog>(occurrences, "date", true).at(
+      -1,
+    )!;
+  }, [transactions]);
 
   const dispatch = useAppDispatch();
 
@@ -77,6 +92,26 @@ const WalletBalanceCard = () => {
           value={formatCurrency(`${walletValue}`)}
         />
       </div>
+
+      <p className={styles.walletBalanceCardLastTransaction}>
+        {lastOccurrence ? (
+          <>
+            Transações recentes:{" "}
+            <span
+              className={styles.value}
+              data-type={lastOccurrence.type}
+              aria-label={`${lastOccurrence.type === "debt" ? "Débito" : "Crédito"} de ${formatCurrency(`${lastOccurrence.value}`)}`}
+            >
+              <span aria-hidden={true}>
+                {lastOccurrence.type === "debt" ? "-" : "+"}{" "}
+                {formatCurrency(`${lastOccurrence.value}`)}
+              </span>
+            </span>
+          </>
+        ) : (
+          "Nenhuma transação recente."
+        )}
+      </p>
 
       {authUser?.walletUpdatedAt && (
         <span className={styles.walletBalanceCardLastUpdate}>
