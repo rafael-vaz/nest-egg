@@ -37,7 +37,7 @@ nest-egg/
 │           └── triggers/    # cron diário + trigger de escrita no Firestore
 ├── packages/
 │   └── shared-types/        # literais compartilhados sem risco de divergência
-├── firebase.json / firestore.rules / firestore.indexes.json / .firebaserc
+├── firebase.json / firestore.rules / firestore.indexes.json / storage.rules / .firebaserc
 └── docs/
 ```
 

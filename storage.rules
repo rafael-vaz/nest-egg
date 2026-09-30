@@ -1,0 +1,27 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    match /nest-egg/users/{userId}/{allPaths=**} {
+      // Publicly readable: photos and covers are rendered via plain
+      // <img src>, which cannot attach a Firebase Auth token, so requiring
+      // auth here would break image display in the app.
+      allow read: if true;
+      // Only the owner can write, and only images up to 5MB — mirrors the
+      // client-side limit in
+      // apps/web/src/utils/file/check-file-max-size.ts, now actually
+      // enforced server-side instead of only in the UI.
+      allow write: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    match /nest-egg/default-covers/{allPaths=**} {
+      // Any authenticated user can read the shared default cover images.
+      allow read: if request.auth != null;
+      // Nobody can modify, overwrite or delete these shared assets.
+      allow write: if false;
+    }
+  }
+}
