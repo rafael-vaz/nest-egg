@@ -1,5 +1,7 @@
 # nest-egg
 
+Live at [nest-egg-ef466.web.app](https://nest-egg-ef466.web.app).
+
 A personal finance tracker for managing day-to-day transactions and keeping
 an accurate, always up-to-date view of your wallet balance.
 
@@ -119,6 +121,7 @@ Starts the Vite development server for the web app.
 | `npm run build -w apps/web`       | Type-check and build for production    |
 | `npm run lint -w apps/web`        | Run ESLint                             |
 | `npm run preview -w apps/web`     | Preview the production build locally   |
+| `npm run deploy -w apps/web`      | Build and deploy to Firebase Hosting   |
 
 ### `apps/functions`
 

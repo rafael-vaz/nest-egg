@@ -75,16 +75,17 @@ resgate.
 
 ## Estado atual conhecido, não alterado neste resgate
 
-- `firebase.json`'s `hosting.public` aponta para uma pasta `public/` na raiz
-  que não existe mais desde que o placeholder do `firebase init hosting` foi
-  descartado — o Hosting do Firebase nunca esteve de fato ligado ao build do
-  Vite (`apps/web/dist`). Ver
-  [`docs/tasks/reestruturacao.md`](tasks/reestruturacao.md) seção 1.
-- `apps/functions/package.json` declara `engines.node: "24"`, não confirmado
-  contra o runtime real de deploy.
+- `apps/functions/package.json` declara `engines.node: "24"` — confirmado
+  como runtime real de deploy (as 4 Cloud Functions rodam em `nodejs24` em
+  produção).
 - Não há suíte de testes em nenhum dos dois apps.
-- O saldo da carteira (`IUser.wallet`) passou a ser reconciliado
-  automaticamente a cada ocorrência de transação (`apps/functions/src/wallet/reconcile-wallet.ts`),
-  além de continuar editável manualmente. O script de backfill
-  (`apps/functions/src/scripts/backfill-wallet-ledger.ts`) ainda não foi
-  executado contra o projeto Firebase real.
+- O saldo da carteira (`IUser.wallet`) é reconciliado automaticamente a cada
+  ocorrência de transação (`apps/functions/src/wallet/reconcile-wallet.ts`),
+  além de continuar editável manualmente. Em produção, publicado e sem
+  transações herdadas para reconciliar — o script de backfill
+  (`apps/functions/src/scripts/backfill-wallet-ledger.ts`) continua existindo
+  para um cenário futuro com dados históricos reais.
+- `firebase.json`'s `hosting.public` aponta para `apps/web/dist`, com um
+  `predeploy` que roda `npm run build` antes de cada deploy de hosting —
+  corrigido em 2026-09-30 (antes apontava para uma pasta `public/`
+  inexistente, herdada do placeholder do `firebase init hosting`).
