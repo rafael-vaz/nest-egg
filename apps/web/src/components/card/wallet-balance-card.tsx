@@ -91,27 +91,27 @@ const WalletBalanceCard = () => {
           onInput={formatCurrencyInput}
           value={formatCurrency(`${walletValue}`)}
         />
-      </div>
 
-      <p className={styles.walletBalanceCardLastTransaction}>
-        {lastOccurrence ? (
-          <>
-            Transações recentes:{" "}
-            <span
-              className={styles.value}
-              data-type={lastOccurrence.type}
-              aria-label={`${lastOccurrence.type === "debt" ? "Débito" : "Crédito"} de ${formatCurrency(`${lastOccurrence.value}`)}`}
-            >
-              <span aria-hidden={true}>
-                {lastOccurrence.type === "debt" ? "-" : "+"}{" "}
-                {formatCurrency(`${lastOccurrence.value}`)}
+        <p className={styles.walletBalanceCardLastTransaction}>
+          {lastOccurrence ? (
+            <>
+              Transações recentes:{" "}
+              <span
+                className={styles.value}
+                data-type={lastOccurrence.type}
+                aria-label={`${lastOccurrence.type === "debt" ? "Débito" : "Crédito"} de ${formatCurrency(`${lastOccurrence.value}`)}`}
+              >
+                <span aria-hidden={true}>
+                  {lastOccurrence.type === "debt" ? "-" : "+"}{" "}
+                  {formatCurrency(`${lastOccurrence.value}`)}
+                </span>
               </span>
-            </span>
-          </>
-        ) : (
-          "Nenhuma transação recente."
-        )}
-      </p>
+            </>
+          ) : (
+            "Nenhuma transação recente."
+          )}
+        </p>
+      </div>
 
       {authUser?.walletUpdatedAt && (
         <span className={styles.walletBalanceCardLastUpdate}>
