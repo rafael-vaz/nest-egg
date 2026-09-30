@@ -113,6 +113,16 @@ Starts the Vite development server for the web app.
 
 ## Available scripts
 
+### Root
+
+| Command                          | Description                                      |
+| ----------------------------------- | ---------------------------------------------------- |
+| `npm run deploy`                    | Deploy everything (hosting, functions, rules)         |
+| `npm run deploy:hosting`            | Build and deploy `apps/web` to Firebase Hosting       |
+| `npm run deploy:functions`          | Deploy Cloud Functions                                |
+| `npm run deploy:firestore-rules`    | Deploy `firestore.rules`                              |
+| `npm run deploy:storage-rules`      | Deploy `storage.rules`                                |
+
 ### `apps/web`
 
 | Command                       | Description                        |

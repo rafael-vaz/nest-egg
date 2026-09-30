@@ -8,5 +8,12 @@
     "type": "git",
     "url": "https://github.com/rafael-vaz/nest-egg.git"
   },
-  "workspaces": ["apps/*", "packages/*"]
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "deploy": "firebase deploy",
+    "deploy:hosting": "npm run deploy -w apps/web",
+    "deploy:functions": "npm run deploy -w apps/functions",
+    "deploy:firestore-rules": "firebase deploy --only firestore:rules",
+    "deploy:storage-rules": "firebase deploy --only storage"
+  }
 }
