@@ -68,6 +68,21 @@ const RecurrenceDateForm = ({ value, onClose }: IRecurrenceDateFormProps) => {
   const weekDays = useWatch({ control, name: "frequency.weekDays" });
   const recurrenceOrder = useWatch({ control, name: "frequency.order" });
 
+  // RHF's Controller only re-renders with the new field.value when a
+  // setValue on its exact registered path ("frequency") is also marked
+  // dirty/touched — with the zod resolver active here, shouldValidate
+  // alone (or shouldDirty alone) isn't enough, confirmed empirically.
+  const updateFrequency = React.useCallback(
+    (next: IFrequencyValue) => {
+      setValue("frequency", next, {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+    },
+    [setValue],
+  );
+
   const currentMonthName = monthsMap[getMonth(startDate)].value;
   const currentDayName = weekDaysMap[getDay(startDate)].value;
   const currentDayNumber = startDate.getDate();
@@ -202,11 +217,11 @@ const RecurrenceDateForm = ({ value, onClose }: IRecurrenceDateFormProps) => {
       const isDifferent = weekDays.length > 1 || weekDays[0] !== expected[0];
 
       if (isDifferent) {
-        setValue("frequency.weekDays", expected);
+        updateFrequency({ weekDays: expected, order: recurrenceOrder });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, weekDays, setValue, getValues]);
+  }, [category, weekDays, recurrenceOrder, updateFrequency, getValues]);
 
   React.useEffect(() => {
     if (category === "year") {
@@ -217,36 +232,49 @@ const RecurrenceDateForm = ({ value, onClose }: IRecurrenceDateFormProps) => {
   React.useEffect(() => {
     if (category === "day") {
       if (Number(amount) > 1) {
-        setValue("frequency.weekDays", null);
+        updateFrequency({ weekDays: null, order: recurrenceOrder });
         setActiveWeekDaysPicker(false);
       } else {
-        setValue(
-          "frequency.weekDays",
-          weekDaysMap.map((weekDay) => weekDay.id),
-        );
+        updateFrequency({
+          weekDays: weekDaysMap.map((weekDay) => weekDay.id),
+          order: recurrenceOrder,
+        });
         setActiveWeekDaysPicker(true);
       }
     }
-  }, [amount, category, setValue]);
+  }, [amount, category, recurrenceOrder, updateFrequency]);
 
   React.useEffect(() => {
+    // Reads weekDays live via getValues instead of the watched closure
+    // value: this effect and the one above both run in the same batch
+    // whenever category/amount change together on mount, and the watched
+    // `weekDays` here can still be the pre-update value from render time.
     switch (category) {
       case "day":
-        setValue("frequency.order", null);
+        updateFrequency({
+          weekDays: getValues("frequency.weekDays") as WeekDaysId[] | null,
+          order: null,
+        });
         break;
-      case "week":
-        if (weekDays === null) setValue("frequency.weekDays", [currentDay]);
-        setValue("frequency.order", null);
+      case "week": {
+        const currentWeekDays = getValues("frequency.weekDays") as
+          | WeekDaysId[]
+          | null;
+        const nextWeekDays =
+          currentWeekDays === null ? [currentDay] : currentWeekDays;
+        updateFrequency({ weekDays: nextWeekDays, order: null });
         setActiveWeekDaysPicker(true);
         break;
+      }
       case "year":
-      case "month":
-        if (!recurrenceOrder) setValue("frequency.order", "day-number");
-        setValue("frequency.weekDays", null);
+      case "month": {
+        const nextOrder = recurrenceOrder || "day-number";
+        updateFrequency({ weekDays: null, order: nextOrder });
         break;
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [category, recurrenceOrder, weekDays, setValue]);
+  }, [category, recurrenceOrder, weekDays, updateFrequency, getValues]);
 
   React.useEffect(() => {
     const expected = weekDaysMap[getDay(startDate)].id as WeekDaysId;
@@ -259,11 +287,11 @@ const RecurrenceDateForm = ({ value, onClose }: IRecurrenceDateFormProps) => {
     const prevStartDay = prevStartDayRef.current;
 
     if (weekDays[0] === prevStartDay && weekDays[0] !== expected) {
-      setValue("frequency.weekDays", [expected]);
+      updateFrequency({ weekDays: [expected], order: recurrenceOrder });
     }
 
     prevStartDayRef.current = expected;
-  }, [startDate, weekDays, setValue]);
+  }, [startDate, weekDays, recurrenceOrder, updateFrequency]);
 
   return (
     <form action="#" aria-label="Fomulário para definição de data recorrente">
