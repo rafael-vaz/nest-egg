@@ -41,6 +41,13 @@ import styles from "./records-container.module.css";
 import RecordsContainerEmptyList from "./records-container-empty-list";
 import RecordsOptionsMenu from "./records-options-menu";
 
+function getTransactionSortDate(transaction: ITransaction): Date {
+  if (transaction.occurrenceLog && transaction.occurrenceLog.length > 0) {
+    return getLatestOccurrenceDate(transaction.occurrenceLog);
+  }
+  return new Date((transaction.date ?? transaction.createdAt) as string);
+}
+
 interface IMonetaryInterval {
   start: number;
   end: number;
@@ -322,6 +329,12 @@ const TransactionsRecordsContent = () => {
           return afterStart && beforeEnd;
         });
       }
+
+      filtered = [...filtered].sort(
+        (a, b) =>
+          getTransactionSortDate(b).getTime() -
+          getTransactionSortDate(a).getTime(),
+      );
     }
 
     return filtered ?? [];
