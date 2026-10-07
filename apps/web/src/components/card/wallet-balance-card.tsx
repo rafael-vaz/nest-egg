@@ -3,8 +3,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
-import { ITransactionOccurrenceLog } from "../../@types/transaction";
 import { RootState, useAppDispatch } from "../../store/configure-store";
+import { openModalState } from "../../store/reducers/modal/modal";
 import { updateAuthUser } from "../../store/reducers/user/user-auth";
 import { setLoading } from "../../store/reducers/user/user-finances";
 import { updateUserThunk } from "../../store/thunks/user/user-data";
@@ -27,13 +27,18 @@ const WalletBalanceCard = () => {
   );
 
   const lastOccurrence = React.useMemo(() => {
-    const occurrences = transactions.flatMap(
-      (transaction) => transaction.occurrenceLog ?? [],
+    const occurrences = transactions.flatMap((transaction) =>
+      (transaction.occurrenceLog ?? []).map((log) => ({
+        ...log,
+        transactionId: transaction.id,
+      })),
     );
     if (occurrences.length === 0) return null;
-    return sortByKey<ITransactionOccurrenceLog>(occurrences, "date", true).at(
-      -1,
-    )!;
+    return sortByKey<(typeof occurrences)[number]>(
+      occurrences,
+      "date",
+      true,
+    ).at(-1)!;
   }, [transactions]);
 
   const dispatch = useAppDispatch();
@@ -96,16 +101,25 @@ const WalletBalanceCard = () => {
           {lastOccurrence ? (
             <>
               Transações recentes:{" "}
-              <span
+              <button
+                type="button"
                 className={styles.value}
                 data-type={lastOccurrence.type}
                 aria-label={`${lastOccurrence.type === "debt" ? "Débito" : "Crédito"} de ${formatCurrency(`${lastOccurrence.value}`)}`}
+                onClick={() =>
+                  dispatch(
+                    openModalState({
+                      id: "update-transaction",
+                      entity: lastOccurrence.transactionId,
+                    }),
+                  )
+                }
               >
                 <span aria-hidden={true}>
                   {lastOccurrence.type === "debt" ? "-" : "+"}{" "}
                   {formatCurrency(`${lastOccurrence.value}`)}
                 </span>
-              </span>
+              </button>
             </>
           ) : (
             "Nenhuma transação recente."
