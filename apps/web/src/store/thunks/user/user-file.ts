@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import createActivityService from "../../../services/activity/create-activity";
 import removeFileService from "../../../services/file/remove-file";
 import uploadFileService from "../../../services/file/upload-file";
 import updateUserService from "../../../services/user/update-user";
@@ -27,6 +28,13 @@ export const deletePhotoThunk = createAsyncThunk<
         }
         await updateUserService({ uid: authUser.uid, photoURL: null }, false);
         dispatch(updateAuthUser({ ...authUser, photoURL: null }));
+        await createActivityService(
+          {
+            type: "profile.photo_removed",
+            entity: { type: "profile", id: null, name: null },
+          },
+          authUser.uid,
+        );
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -55,6 +63,13 @@ export const updatePhotoThunk = createAsyncThunk<
         );
         await updateUserService({ uid: authUser.uid, photoURL: url }, false);
         dispatch(updateAuthUser({ ...authUser, photoURL: url }));
+        await createActivityService(
+          {
+            type: "profile.photo_updated",
+            entity: { type: "profile", id: null, name: null },
+          },
+          authUser.uid,
+        );
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
