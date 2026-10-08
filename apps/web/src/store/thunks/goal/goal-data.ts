@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { IGoal } from "../../../@types/goal";
+import createActivityService from "../../../services/activity/create-activity";
 import readCollectionService from "../../../services/collection/read-collection";
 import updateCollectionService from "../../../services/collection/update-collection";
 import createGoalService from "../../../services/goal/create-goal";
@@ -8,11 +9,14 @@ import deleteGoalService from "../../../services/goal/delete-goal";
 import readAllGoalsService from "../../../services/goal/read-all-goals";
 import readGoalService from "../../../services/goal/read-goal";
 import updateGoalService from "../../../services/goal/update-goal";
+import { buildChanges } from "../../../utils/activity/build-changes";
 import { RootState } from "../../configure-store";
 import {
   updateCollectionLocal,
   updateGoalLocal,
 } from "../../reducers/user/user-finances";
+
+const TRACKED_GOAL_KEYS: (keyof IGoal)[] = ["value", "status", "collection"];
 
 // create goal
 export const createGoalThunk = createAsyncThunk<
@@ -22,6 +26,13 @@ export const createGoalThunk = createAsyncThunk<
 >("goalData/createGoal", async (data, { dispatch, rejectWithValue }) => {
   try {
     await createGoalService(data.goal, data.userId);
+    await createActivityService(
+      {
+        type: "goal.created",
+        entity: { type: "goal", id: data.goal.id, name: data.goal.name },
+      },
+      data.userId,
+    );
     if (data.goal.collection) {
       const collection = await readCollectionService(
         data.goal.collection.id,
@@ -103,6 +114,29 @@ export const updateGoalThunk = createAsyncThunk<
       }
 
       await updateGoalService(data.goal, data.userId, data.hasAlert ?? false);
+
+      if (currentGoal) {
+        const changes = buildChanges(
+          currentGoal as unknown as Record<string, unknown>,
+          data.goal as unknown as Record<string, unknown>,
+          TRACKED_GOAL_KEYS,
+        );
+
+        if (changes) {
+          await createActivityService(
+            {
+              type: "goal.updated",
+              entity: {
+                type: "goal",
+                id: data.goal.id,
+                name: data.goal.name ?? currentGoal.name,
+              },
+              changes,
+            },
+            data.userId,
+          );
+        }
+      }
 
       if (
         oldCollectionId &&
@@ -209,6 +243,14 @@ export const deleteGoalThunk = createAsyncThunk<
       }
     }
     await deleteGoalService(data.goalId, data.userId);
+
+    await createActivityService(
+      {
+        type: "goal.deleted",
+        entity: { type: "goal", id: data.goalId, name: goal?.name ?? null },
+      },
+      data.userId,
+    );
   } catch (error: unknown) {
     if (error instanceof Error) {
       rejectWithValue(error.message);
