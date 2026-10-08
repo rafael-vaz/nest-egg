@@ -26,6 +26,11 @@ service cloud.firestore {
         allow read: if isOwner(userId);
         allow write: if false;
       }
+
+      match /activities/{activityId} {
+        allow read, create: if isOwner(userId);
+        allow update, delete: if false;
+      }
     }
   }
 }
