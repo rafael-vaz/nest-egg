@@ -4,9 +4,11 @@ import { UseFormHandleSubmit } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 import { ProfileFormData } from "../../schemas/profile-form-schema";
+import createActivityService from "../../services/activity/create-activity";
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { updateAuthUser } from "../../store/reducers/user/user-auth";
 import { updateUserThunk } from "../../store/thunks/user/user-data";
+import { buildChanges } from "../../utils/activity/build-changes";
 import createOnError from "../../utils/form/create-on-error";
 import Button from "../button/button";
 import styles from "./profile-form-submit-button.module.css";
@@ -38,6 +40,38 @@ const ProfileFormSubmitButton = ({
       setLoading(true);
       await dispatch(updateUserThunk(newUserData));
       dispatch(updateAuthUser(newUserData));
+
+      const profileChanges = buildChanges(
+        authUser! as unknown as Record<string, unknown>,
+        newUserData,
+        ["name", "dateOfBirth"],
+      );
+      if (profileChanges) {
+        await createActivityService(
+          {
+            type: "profile.updated",
+            entity: { type: "profile", id: null, name: null },
+            changes: profileChanges,
+          },
+          authUser!.uid,
+        );
+      }
+
+      const walletChanges = buildChanges(
+        authUser! as unknown as Record<string, unknown>,
+        newUserData,
+        ["wallet"],
+      );
+      if (walletChanges) {
+        await createActivityService(
+          {
+            type: "wallet.updated",
+            entity: { type: "wallet", id: null, name: null },
+            changes: { value: walletChanges.wallet },
+          },
+          authUser!.uid,
+        );
+      }
     } catch (error) {
       console.log(`Error in registering user: ${error}`);
     } finally {
