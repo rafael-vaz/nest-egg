@@ -1,5 +1,6 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
+import activityData from "./reducers/activity/activity-data";
 import announcement from "./reducers/announcement/announcement-data.tsx";
 import collectionData from "./reducers/collection/collection-data";
 import goalData from "./reducers/goal/goal-data";
@@ -21,6 +22,7 @@ const reducer = combineReducers({
   goalData,
   transactionData,
   collectionData,
+  activityData,
   modal,
   confirmationModal,
   announcement,

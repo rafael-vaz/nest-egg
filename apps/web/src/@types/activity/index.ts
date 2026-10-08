@@ -35,3 +35,8 @@ export interface IActivity {
   entity: IActivityEntity;
   changes?: ActivityChanges;
 }
+
+export interface IActivitySlice {
+  loading: boolean;
+  error: string | null;
+}
