@@ -3,6 +3,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
+import createActivityService from "../../services/activity/create-activity";
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { openModalState } from "../../store/reducers/modal/modal";
 import { updateAuthUser } from "../../store/reducers/user/user-auth";
@@ -73,6 +74,15 @@ const WalletBalanceCard = () => {
       await dispatch(updateUserThunk(user));
 
       dispatch(updateAuthUser(user));
+
+      await createActivityService(
+        {
+          type: "wallet.updated",
+          entity: { type: "wallet", id: null, name: null },
+          changes: { value: { from: authUser.wallet, to: newWalletValue } },
+        },
+        authUser.uid,
+      );
 
       setWalletValue(newWalletValue);
 
