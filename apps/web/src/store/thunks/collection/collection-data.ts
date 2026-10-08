@@ -1,13 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import { ICollection } from "../../../@types/collection";
+import createActivityService from "../../../services/activity/create-activity";
 import createCollectionService from "../../../services/collection/create-collection";
 import deleteCollectionService from "../../../services/collection/delete-collection";
 import readAllCollectionsService from "../../../services/collection/read-all-collections";
 import readCollectionService from "../../../services/collection/read-collection";
 import updateCollectionService from "../../../services/collection/update-collection";
 import updateGoalService from "../../../services/goal/update-goal";
+import { buildChanges } from "../../../utils/activity/build-changes";
 import { updateGoalLocal } from "../../reducers/user/user-finances";
+
+const TRACKED_COLLECTION_KEYS: (keyof ICollection)[] = ["name"];
 
 // create collection
 export const createCollectionThunk = createAsyncThunk<
@@ -19,6 +23,17 @@ export const createCollectionThunk = createAsyncThunk<
   async (data, { dispatch, rejectWithValue }) => {
     try {
       await createCollectionService(data.collection, data.userId);
+      await createActivityService(
+        {
+          type: "collection.created",
+          entity: {
+            type: "collection",
+            id: data.collection.id,
+            name: data.collection.name,
+          },
+        },
+        data.userId,
+      );
       const promises =
         data.collection.goals?.map((goal) => {
           const updatedGoal = {
@@ -128,6 +143,27 @@ export const updateCollectionThunk = createAsyncThunk<
         data.userId,
         data.hasAlert ?? false,
       );
+
+      const changes = buildChanges(
+        currentCollection as unknown as Record<string, unknown>,
+        data.collection as unknown as Record<string, unknown>,
+        TRACKED_COLLECTION_KEYS,
+      );
+
+      if (changes) {
+        await createActivityService(
+          {
+            type: "collection.updated",
+            entity: {
+              type: "collection",
+              id: data.collection.id,
+              name: data.collection.name ?? currentCollection!.name,
+            },
+            changes,
+          },
+          data.userId,
+        );
+      }
     } catch (error: unknown) {
       if (error instanceof Error) {
         rejectWithValue(error.message);
@@ -160,6 +196,18 @@ export const deleteCollectionThunk = createAsyncThunk<
         await Promise.all(promises);
       }
       await deleteCollectionService(data.collectionId, data.userId);
+
+      await createActivityService(
+        {
+          type: "collection.deleted",
+          entity: {
+            type: "collection",
+            id: data.collectionId,
+            name: collection?.name ?? null,
+          },
+        },
+        data.userId,
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         rejectWithValue(error.message);
