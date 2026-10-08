@@ -71,7 +71,7 @@ const WalletBalanceCard = () => {
     try {
       setLoading(true);
 
-      await dispatch(updateUserThunk(user));
+      await dispatch(updateUserThunk(user)).unwrap();
 
       dispatch(updateAuthUser(user));
 
@@ -79,7 +79,9 @@ const WalletBalanceCard = () => {
         {
           type: "wallet.updated",
           entity: { type: "wallet", id: null, name: null },
-          changes: { value: { from: authUser.wallet, to: newWalletValue } },
+          changes: {
+            value: { from: authUser.wallet ?? null, to: newWalletValue },
+          },
         },
         authUser.uid,
       );

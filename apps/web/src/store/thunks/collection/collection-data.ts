@@ -182,19 +182,28 @@ export const deleteCollectionThunk = createAsyncThunk<
   "collectionData/deleteCollection",
   async (data, { dispatch, rejectWithValue }) => {
     try {
-      const collection = await readCollectionService(
-        data.collectionId,
-        data.userId,
-      );
-      if (collection?.goals) {
-        const promises =
-          collection.goals.map((goal) => {
-            const updatedGoal = { id: goal.id, collection: null };
-            dispatch(updateGoalLocal(updatedGoal));
-            return updateGoalService(updatedGoal, data.userId, false);
-          }) ?? [];
-        await Promise.all(promises);
+      // Leitura só serve para desvincular as metas e capturar o nome no
+      // registro de atividade — se ela falhar, a exclusão real precisa
+      // continuar mesmo assim.
+      let collection: ICollection | null = null;
+      try {
+        collection = await readCollectionService(
+          data.collectionId,
+          data.userId,
+        );
+        if (collection?.goals) {
+          const promises =
+            collection.goals.map((goal) => {
+              const updatedGoal = { id: goal.id, collection: null };
+              dispatch(updateGoalLocal(updatedGoal));
+              return updateGoalService(updatedGoal, data.userId, false);
+            }) ?? [];
+          await Promise.all(promises);
+        }
+      } catch {
+        collection = null;
       }
+
       await deleteCollectionService(data.collectionId, data.userId);
 
       await createActivityService(

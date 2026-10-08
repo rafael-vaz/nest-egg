@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
+import createActivityService from "../../services/activity/create-activity";
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { updateAuthUser } from "../../store/reducers/user/user-auth";
 import { updateUserThunk } from "../../store/thunks/user/user-data";
@@ -29,8 +30,22 @@ const ProfileCoverMenuListItem = ({
     if (authUser?.uid && !isSelected) {
       if (loading.update) return;
       setActive(false);
-      await dispatch(updateUserThunk({ uid: authUser.uid, coverURL }));
+
+      const previousCoverURL = authUser.coverURL ?? null;
+
+      await dispatch(
+        updateUserThunk({ uid: authUser.uid, coverURL }),
+      ).unwrap();
       dispatch(updateAuthUser({ coverURL }));
+
+      await createActivityService(
+        {
+          type: "profile.updated",
+          entity: { type: "profile", id: null, name: null },
+          changes: { coverURL: { from: previousCoverURL, to: coverURL } },
+        },
+        authUser.uid,
+      );
     }
   }
 

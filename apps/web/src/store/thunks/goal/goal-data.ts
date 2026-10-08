@@ -224,24 +224,33 @@ export const deleteGoalThunk = createAsyncThunk<
   { rejectValue: string }
 >("goalData/deleteGoal", async (data, { dispatch, rejectWithValue }) => {
   try {
-    const goal = await readGoalService(data.goalId, data.userId);
-    if (goal?.collection) {
-      const collection = await readCollectionService(
-        goal.collection.id,
-        data.userId,
-      );
-      if (collection) {
-        const newGoals = collection?.goals?.filter(
-          (goal) => goal.id !== data.goalId,
+    // Leitura só serve para desvincular a coleção e capturar o nome no
+    // registro de atividade — se ela falhar, a exclusão real precisa
+    // continuar mesmo assim.
+    let goal: IGoal | null = null;
+    try {
+      goal = await readGoalService(data.goalId, data.userId);
+      if (goal?.collection) {
+        const collection = await readCollectionService(
+          goal.collection.id,
+          data.userId,
         );
-        const updatedCollection = {
-          id: collection.id,
-          goals: newGoals?.length ? newGoals : null,
-        };
-        dispatch(updateCollectionLocal(updatedCollection));
-        await updateCollectionService(updatedCollection, data.userId, false);
+        if (collection) {
+          const newGoals = collection?.goals?.filter(
+            (goal) => goal.id !== data.goalId,
+          );
+          const updatedCollection = {
+            id: collection.id,
+            goals: newGoals?.length ? newGoals : null,
+          };
+          dispatch(updateCollectionLocal(updatedCollection));
+          await updateCollectionService(updatedCollection, data.userId, false);
+        }
       }
+    } catch {
+      goal = null;
     }
+
     await deleteGoalService(data.goalId, data.userId);
 
     await createActivityService(

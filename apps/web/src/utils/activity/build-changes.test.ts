@@ -60,4 +60,66 @@ describe("buildChanges", () => {
     const result = buildChanges(before, after, ["name", "value"]);
     expect(result).not.toHaveProperty("name");
   });
+
+  it("treats empty string, null and undefined as equivalent (no change)", () => {
+    const before: Sample = { name: "Mercado", value: 100, recurrence: null };
+    const after: Partial<Sample> = { name: "Mercado", value: 100 };
+
+    interface WithDescription extends Record<string, unknown> {
+      name: string;
+      value: number;
+      recurrence: { category: string } | null;
+      description: string | null | undefined;
+    }
+
+    const beforeWithDescription: WithDescription = { ...before, description: "" };
+    const afterWithDescription: Partial<WithDescription> = {
+      ...after,
+      description: null,
+    };
+
+    expect(
+      buildChanges(beforeWithDescription, afterWithDescription, [
+        "description",
+      ]),
+    ).toBeUndefined();
+  });
+
+  it("diffs object-valued fields by content regardless of key order", () => {
+    const before: Sample = {
+      name: "Mercado",
+      value: 100,
+      recurrence: { category: "month" },
+    };
+    const afterReordered = { category: "month" } as const;
+    const after: Partial<Sample> = {
+      // Same content as `before.recurrence`, different key insertion order —
+      // simulates Firestore returning fields in a different order than the
+      // client-built object.
+      recurrence: JSON.parse(JSON.stringify(afterReordered)),
+    };
+
+    expect(buildChanges(before, after, ["recurrence"])).toBeUndefined();
+  });
+
+  it("coerces undefined to null so the result is always Firestore-safe", () => {
+    interface WithOptional extends Record<string, unknown> {
+      name: string;
+      value: number;
+      recurrence: { category: string } | null;
+      wallet?: number;
+    }
+
+    const before: WithOptional = {
+      name: "Mercado",
+      value: 100,
+      recurrence: null,
+      wallet: undefined,
+    };
+    const after: Partial<WithOptional> = { wallet: 500 };
+
+    expect(buildChanges(before, after, ["wallet"])).toEqual({
+      wallet: { from: null, to: 500 },
+    });
+  });
 });

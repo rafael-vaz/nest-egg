@@ -38,7 +38,7 @@ const ProfileFormSubmitButton = ({
     };
     try {
       setLoading(true);
-      await dispatch(updateUserThunk(newUserData));
+      await dispatch(updateUserThunk(newUserData)).unwrap();
       dispatch(updateAuthUser(newUserData));
 
       const profileChanges = buildChanges(
