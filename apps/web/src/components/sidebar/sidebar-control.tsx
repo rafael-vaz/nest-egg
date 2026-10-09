@@ -10,20 +10,19 @@ const SidebarControl = ({
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   const dispatch = useAppDispatch();
 
-  function handleClick() {
+  function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
     dispatch(openToolMenuState());
+    event.currentTarget.blur();
   }
 
   return (
     <li className={sidebarItemStyles.sidebarItem}>
-      <button
-        title="Menu"
-        aria-label="Acessar Menu"
-        {...props}
-        onClick={handleClick}
-      >
+      <button aria-label="Acessar Menu" {...props} onClick={handleClick}>
         <Menu size={20} />
       </button>
+      <span className={sidebarItemStyles.sidebarItemTooltip} role="tooltip">
+        Menu
+      </span>
     </li>
   );
 };

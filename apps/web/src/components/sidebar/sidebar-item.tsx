@@ -66,13 +66,18 @@ const SidebarItem = ({
     <li className={styles.sidebarItem} data-active={isActive}>
       <button
         id={`sidebar-item-${id}`}
-        title={label}
         aria-label={descritiption}
         {...props}
-        onClick={() => handleSidebarItemClick(id)}
+        onClick={(event) => {
+          handleSidebarItemClick(id);
+          event.currentTarget.blur();
+        }}
       >
         {id === "home" ? <div>{icon}</div> : icon}
       </button>
+      <span className={styles.sidebarItemTooltip} role="tooltip">
+        {label}
+      </span>
     </li>
   );
 };

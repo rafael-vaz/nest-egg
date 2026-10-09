@@ -10,17 +10,24 @@ interface IUserMenuButton
   active: boolean;
 }
 
-const UserMenuButton = ({ active, ...props }: IUserMenuButton) => {
+const UserMenuButton = ({ active, onClick, ...props }: IUserMenuButton) => {
   const { authUser } = useSelector((state: RootState) => state.userAuth);
   return (
     <button
       className={`${styles.userMenuButton} ${sidebarItemStyles.sidebarItem}`}
-      title={`${active ? "Fechar" : "Abrir"} opções do usuário`}
+      aria-label={`${active ? "Fechar" : "Abrir"} opções do usuário`}
       aria-controls="user-options-list"
       aria-expanded={active}
       {...props}
+      onClick={(event) => {
+        onClick?.(event);
+        event.currentTarget.blur();
+      }}
     >
       <img src={authUser?.photoURL ?? avatar} height={32} width={32} />
+      <span className={sidebarItemStyles.sidebarItemTooltip} role="tooltip">
+        Perfil
+      </span>
     </button>
   );
 };
