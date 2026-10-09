@@ -110,40 +110,38 @@ const WalletBalanceCard = () => {
         />
 
         <p className={styles.walletBalanceCardLastTransaction}>
+          Transações recentes:{" "}
           {lastOccurrence ? (
-            <>
-              Transações recentes:{" "}
-              <button
-                type="button"
-                className={styles.value}
-                data-type={lastOccurrence.type}
-                aria-label={`${lastOccurrence.type === "debt" ? "Débito" : "Crédito"} de ${formatCurrency(`${lastOccurrence.value}`)}`}
-                onClick={() =>
-                  dispatch(
-                    openModalState({
-                      id: "update-transaction",
-                      entity: lastOccurrence.transactionId,
-                    }),
-                  )
-                }
-              >
-                <span aria-hidden={true}>
-                  {lastOccurrence.type === "debt" ? "-" : "+"}{" "}
-                  {formatCurrency(`${lastOccurrence.value}`)}
-                </span>
-              </button>
-            </>
+            <button
+              type="button"
+              className={styles.value}
+              data-type={lastOccurrence.type}
+              aria-label={`${lastOccurrence.type === "debt" ? "Débito" : "Crédito"} de ${formatCurrency(`${lastOccurrence.value}`)}`}
+              onClick={() =>
+                dispatch(
+                  openModalState({
+                    id: "update-transaction",
+                    entity: lastOccurrence.transactionId,
+                  }),
+                )
+              }
+            >
+              <span aria-hidden={true}>
+                {lastOccurrence.type === "debt" ? "-" : "+"}{" "}
+                {formatCurrency(`${lastOccurrence.value}`)}
+              </span>
+            </button>
           ) : (
-            "Nenhuma transação recente."
+            formatCurrency("0")
           )}
         </p>
       </div>
 
-      {authUser?.walletUpdatedAt && (
-        <span className={styles.walletBalanceCardLastUpdate}>
-          Atualizado {formatRelativeDate(new Date(authUser.walletUpdatedAt))}
-        </span>
-      )}
+      <span className={styles.walletBalanceCardLastUpdate}>
+        {authUser?.walletUpdatedAt
+          ? `Atualizado ${formatRelativeDate(new Date(authUser.walletUpdatedAt))}`
+          : "Atualizando informações..."}
+      </span>
     </Card>
   );
 };
