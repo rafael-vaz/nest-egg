@@ -57,7 +57,7 @@ const Modal = () => {
 
   switch (id) {
     case "calculator":
-      modalData.width = "x-small";
+      modalData.width = "small";
       modalData.content = <Calculator onClose={handleCloseModal} />;
       break;
     case "profile":

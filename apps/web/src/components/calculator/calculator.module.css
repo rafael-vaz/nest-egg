@@ -37,7 +37,17 @@
   gap: 5px;
 }
 
+.calculatorScientificButtons {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 5px;
+  margin-bottom: 0.625rem;
+}
+
 .calculatorButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.375rem;
   font-size: 1rem;
   border-radius: 4px;
@@ -46,6 +56,15 @@
   cursor: pointer;
   color: var(--ne-c2);
   font-family: var(--content-font);
+}
+
+.calculatorButtonScientific {
+  min-height: 1.75rem;
+  padding: 0.3125rem 0.125rem;
+  font-size: 0.75rem;
+  background-color: var(--ne-c8);
+  border: 1px solid var(--ne-c6);
+  color: var(--ne-c2);
 }
 
 .calculatorButtonOperation {
@@ -64,8 +83,8 @@
   padding: 0.375rem;
   font-size: 1rem;
   border-radius: 4px;
-  border: 1px solid tomato;
-  background-color: rgba(255, 99, 71, 0.4);
+  border: 1px solid var(--error);
+  background-color: rgba(231, 76, 60, 0.4);
   color: var(--ne-c2);
   cursor: pointer;
 }

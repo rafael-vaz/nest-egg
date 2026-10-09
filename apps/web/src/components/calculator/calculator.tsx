@@ -1,9 +1,10 @@
 import currency from "currency.js";
-import { X } from "lucide-react";
+import { Delete, X } from "lucide-react";
+import { evaluate } from "mathjs";
 import { useState } from "react";
 
 import Button from "../button/button";
-import styles from "./Calculator.module.css";
+import styles from "./calculator.module.css";
 
 type Operation = "+" | "-" | "*" | "/";
 
@@ -23,6 +24,7 @@ const Calculator = ({ onClose }: ICalculatorProps) => {
   const [input, setInput] = useState<string>("");
   const [result, setResult] = useState<string | null>(null);
   const [operationCompleted, setOperationCompleted] = useState<boolean>(false);
+  const [isDegrees, setIsDegrees] = useState<boolean>(true);
 
   const operations: Operation[] = ["/", "*", "-", "+"];
 
@@ -98,10 +100,57 @@ const Calculator = ({ onClose }: ICalculatorProps) => {
     setOperationCompleted(false);
   };
 
+  const handleBackspace = () => {
+    if (operationCompleted) {
+      handleClear();
+      return;
+    }
+    setInput((prev) => formatDynamicInput(prev.slice(0, -1)));
+  };
+
+  const handleToggleSign = () => {
+    setInput((prev) => {
+      const parts = prev.split(/([+\-*/])/);
+      const lastIndex = parts.length - 1;
+      const lastPart = parts[lastIndex];
+
+      if (!lastPart) return prev;
+
+      if (lastPart.startsWith("-(") && lastPart.endsWith(")")) {
+        parts[lastIndex] = lastPart.slice(2, -1);
+      } else {
+        parts[lastIndex] = `-(${lastPart})`;
+      }
+
+      return parts.join("");
+    });
+  };
+
+  const handleToggleDegrees = () => {
+    setIsDegrees((prev) => !prev);
+  };
+
   const handleCalculate = () => {
     try {
-      const sanitizedInput = input.replace(/\./g, "").replace(/,/g, ".");
-      const evalResult = Function(`return ${sanitizedInput}`)();
+      let sanitizedInput = input.replace(/\./g, "").replace(/,/g, ".");
+
+      const openParens = (sanitizedInput.match(/\(/g) || []).length;
+      const closeParens = (sanitizedInput.match(/\)/g) || []).length;
+      sanitizedInput += ")".repeat(Math.max(0, openParens - closeParens));
+
+      if (isDegrees) {
+        sanitizedInput = sanitizedInput.replace(
+          /(sin|cos|tan)\(([^()]+)\)/g,
+          (_match, fn, arg) => `${fn}(${arg} deg)`,
+        );
+      }
+
+      const evalResult = evaluate(sanitizedInput);
+
+      if (typeof evalResult !== "number" || !isFinite(evalResult)) {
+        throw new Error("Invalid result");
+      }
+
       const isInteger = Number.isInteger(evalResult);
       const formattedResult = formatBR(evalResult, isInteger ? 0 : 2);
 
@@ -113,7 +162,7 @@ const Calculator = ({ onClose }: ICalculatorProps) => {
     }
   };
 
-  const buttons = [
+  const digitButtons = [
     "7",
     "8",
     "9",
@@ -130,6 +179,22 @@ const Calculator = ({ onClose }: ICalculatorProps) => {
     ",",
     "=",
     "+",
+  ];
+
+  const scientificButtons: { label: string; value: string }[] = [
+    { label: "sin", value: "sin(" },
+    { label: "cos", value: "cos(" },
+    { label: "tan", value: "tan(" },
+    { label: "√", value: "sqrt(" },
+    { label: "x²", value: "^2" },
+    { label: "xʸ", value: "^" },
+    { label: "log", value: "log10(" },
+    { label: "ln", value: "log(" },
+    { label: "π", value: "pi" },
+    { label: "e", value: "e" },
+    { label: "%", value: "/100" },
+    { label: "(", value: "(" },
+    { label: ")", value: ")" },
   ];
 
   return (
@@ -156,8 +221,44 @@ const Calculator = ({ onClose }: ICalculatorProps) => {
           {input || "0"} {result !== null && `= ${result}`}
         </div>
 
+        <div className={styles.calculatorScientificButtons}>
+          <button
+            className={`${styles.calculatorButton} ${styles.calculatorButtonScientific}`}
+            title="Alternar entre graus e radianos"
+            aria-label="Alternar entre graus e radianos"
+            onClick={handleToggleDegrees}
+          >
+            {isDegrees ? "DEG" : "RAD"}
+          </button>
+          {scientificButtons.map(({ label, value }) => (
+            <button
+              key={label}
+              className={`${styles.calculatorButton} ${styles.calculatorButtonScientific}`}
+              onClick={() => handleClick(value)}
+            >
+              {label}
+            </button>
+          ))}
+          <button
+            className={`${styles.calculatorButton} ${styles.calculatorButtonScientific}`}
+            title="Inverter sinal"
+            aria-label="Inverter sinal"
+            onClick={handleToggleSign}
+          >
+            +/-
+          </button>
+          <button
+            className={`${styles.calculatorButton} ${styles.calculatorButtonScientific}`}
+            title="Apagar último caractere"
+            aria-label="Apagar último caractere"
+            onClick={handleBackspace}
+          >
+            <Delete size={16} />
+          </button>
+        </div>
+
         <div className={styles.calculatorButtons}>
-          {buttons.map((btn) => {
+          {digitButtons.map((btn) => {
             const isOperation = operations.includes(btn as Operation);
             const isEqual = btn === "=";
             let className = styles.calculatorButton;
