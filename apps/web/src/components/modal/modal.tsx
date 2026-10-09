@@ -11,6 +11,7 @@ import {
 import slideDownVariants from "../../motion/slide-down-variants";
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { closeModalState } from "../../store/reducers/modal/modal";
+import Activities from "../activities/activities";
 import Calculator from "../calculator/calculator";
 import CreateCollection from "../collection/create-collection";
 import UpdateCollection from "../collection/update-collection";
@@ -97,6 +98,10 @@ const Modal = () => {
       modalData.content = (
         <UpdateTransaction transactionId={entity!} onClose={handleCloseModal} />
       );
+      break;
+    case "activities":
+      modalData.width = "medium";
+      modalData.content = <Activities onClose={handleCloseModal} />;
       break;
   }
 

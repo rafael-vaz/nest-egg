@@ -24,9 +24,13 @@ const ToolMenuItem = ({ id, icon: Icon, text }: IToolMenuItemProps) => {
         break;
       case "search":
         navigate("/search");
+        dispatch(closeToolMenuState());
         break;
       case "create":
         dispatch(openModalState({ id: "create" }));
+        break;
+      case "activities":
+        dispatch(openModalState({ id: "activities" }));
         break;
     }
   }

@@ -1,0 +1,87 @@
+.activitiesItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.625rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--ne-c6);
+  background-color: var(--ne-c8);
+}
+
+.activitiesItemIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 0.5rem;
+  background-color: var(--ne-c7);
+  color: var(--ne-c4);
+}
+
+.activitiesItem[data-action="created"] .activitiesItemIcon {
+  color: var(--success);
+}
+.activitiesItem[data-action="updated"] .activitiesItemIcon {
+  color: var(--info);
+}
+.activitiesItem[data-action="deleted"] .activitiesItemIcon {
+  color: var(--error);
+}
+
+.activitiesItemContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  font-family: inherit;
+}
+
+button.activitiesItemContent {
+  cursor: pointer;
+}
+
+.activitiesItemEntityLink {
+  font-weight: var(--regular);
+  color: var(--ne-c11);
+}
+
+button.activitiesItemContent:hover .activitiesItemEntityLink,
+button.activitiesItemContent:focus .activitiesItemEntityLink {
+  text-decoration: underline;
+}
+
+.activitiesItemEntity {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.625rem;
+  color: var(--ne-c4);
+  text-transform: uppercase;
+  letter-spacing: 0.03125rem;
+}
+
+.activitiesItemTitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--ne-c2);
+}
+
+.activitiesItemDetail {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--ne-c4);
+}
+
+.activitiesItemDate {
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  color: var(--ne-c5);
+}

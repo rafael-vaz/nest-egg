@@ -1,0 +1,12 @@
+.activitiesListHeader {
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.activitiesList {
+  min-height: 12.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  width: 100%;
+}

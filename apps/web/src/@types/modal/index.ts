@@ -9,6 +9,7 @@ export const modalIds = [
   "update-collection",
   "new-transaction",
   "update-transaction",
+  "activities",
 ] as const;
 
 export const confirmationModalId = [

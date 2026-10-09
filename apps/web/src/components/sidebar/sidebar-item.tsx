@@ -45,7 +45,7 @@ const SidebarItem = ({
         navigate("/wallet");
         break;
       case "activities":
-        navigate("/activities");
+        dispatch(openModalState({ id: "activities" }));
         break;
       case "search":
         navigate("/search");
