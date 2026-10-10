@@ -21,6 +21,8 @@ const TutorialTour = () => {
     steps: tutorialSteps,
     options: {
       showProgress: true,
+      buttons: ["close", "back", "primary", "skip"],
+      closeButtonAction: "skip",
       backgroundColor: "var(--ne-c7)",
       primaryColor: "var(--ne-c11)",
       textColor: "var(--ne-c1)",
@@ -33,6 +35,7 @@ const TutorialTour = () => {
       close: "Fechar",
       last: "Concluir",
       next: "Próximo",
+      nextWithProgress: "Próximo ({current} de {total})",
       skip: "Pular",
     },
     onEvent: (data) => {

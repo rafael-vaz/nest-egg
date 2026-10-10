@@ -19,14 +19,8 @@ const useAuth = () => {
           const savedUser = await readUserService(user.uid);
           if (savedUser) {
             const userData: IUser = {
-              uid: savedUser.uid,
-              email: savedUser.email,
-              name: savedUser.name,
+              ...savedUser,
               emailVerified: user.emailVerified,
-              photoURL: savedUser.photoURL,
-              coverURL: savedUser.coverURL,
-              dateOfBirth: savedUser.dateOfBirth,
-              wallet: savedUser.wallet,
             };
             dispatch(updateAuthUser(userData));
           } else {
