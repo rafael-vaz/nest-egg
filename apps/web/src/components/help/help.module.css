@@ -35,7 +35,7 @@
 
 .helpFaqItem {
   border-radius: 0.625rem;
-  border: 1px solid var(--ne-c6);
+  border: 0.0625rem solid var(--ne-c6);
   background-color: var(--ne-c8);
   overflow: hidden;
 }
@@ -99,16 +99,4 @@
 
 .helpFaqHeader .helpFaqTitle {
   margin: 0;
-}
-
-.helpTutorialTrigger {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.helpTutorialStepCount {
-  font-size: 0.6875rem;
-  color: var(--ne-c4);
-  white-space: nowrap;
 }

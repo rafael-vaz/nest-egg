@@ -4,7 +4,7 @@
   gap: 0.625rem;
   padding: 0.625rem;
   border-radius: 0.625rem;
-  border: 1px solid var(--ne-c6);
+  border: 0.0625rem solid var(--ne-c6);
   background-color: var(--ne-c8);
 }
 

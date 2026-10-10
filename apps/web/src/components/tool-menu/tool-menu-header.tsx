@@ -23,6 +23,7 @@ const ToolMenuHeader = () => {
     <header className={styles.toolMenuHeader}>
       <div className={styles.toolMenuHeaderUser}>
         <div
+          id="tool-menu-profile-button"
           className={styles.toolMenuHeaderUserPhoto}
           aria-label="Acessar perfil"
           onClick={() => dispatch(openModalState({ id: "profile" }))}

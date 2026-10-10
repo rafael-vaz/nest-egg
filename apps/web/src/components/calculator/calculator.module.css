@@ -23,9 +23,9 @@
   height: auto;
   margin-bottom: 0.625rem;
   padding: 0.625rem;
-  border-radius: 4px;
+  border-radius: 0.25rem;
   background-color: var(--ne-c8);
-  border: 1px solid var(--ne-c6);
+  border: 0.0625rem solid var(--ne-c6);
   font-size: 1.125rem;
   text-align: right;
   overflow-x: auto;
@@ -34,13 +34,13 @@
 .calculatorButtons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
+  gap: 0.3125rem;
 }
 
 .calculatorScientificButtons {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 5px;
+  gap: 0.3125rem;
   margin-bottom: 0.625rem;
 }
 
@@ -50,8 +50,8 @@
   justify-content: center;
   padding: 0.375rem;
   font-size: 1rem;
-  border-radius: 4px;
-  border: 1px solid var(--ne-c6);
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--ne-c6);
   background-color: rgba(78, 77, 91, 0.4);
   cursor: pointer;
   color: var(--ne-c2);
@@ -63,18 +63,18 @@
   padding: 0.3125rem 0.125rem;
   font-size: 0.75rem;
   background-color: var(--ne-c8);
-  border: 1px solid var(--ne-c6);
+  border: 0.0625rem solid var(--ne-c6);
   color: var(--ne-c2);
 }
 
 .calculatorButtonOperation {
   background-color: rgba(131, 111, 255, 0.4);
-  border: 1px solid var(--ne-c11);
+  border: 0.0625rem solid var(--ne-c11);
 }
 
 .calculatorButtonEqual {
   background-color: rgba(21, 245, 186, 0.4);
-  border: 1px solid var(--ne-c12);
+  border: 0.0625rem solid var(--ne-c12);
 }
 
 .calculatorClear {
@@ -82,8 +82,8 @@
   grid-column: span 4;
   padding: 0.375rem;
   font-size: 1rem;
-  border-radius: 4px;
-  border: 1px solid var(--error);
+  border-radius: 0.25rem;
+  border: 0.0625rem solid var(--error);
   background-color: rgba(231, 76, 60, 0.4);
   color: var(--ne-c2);
   cursor: pointer;
