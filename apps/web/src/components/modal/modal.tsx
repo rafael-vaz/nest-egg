@@ -18,6 +18,7 @@ import UpdateCollection from "../collection/update-collection";
 import CreationMenu from "../creation-menu/creation-menu";
 import CreateGoal from "../goal/create-goal";
 import UpdateGoal from "../goal/update-goal";
+import Help from "../help/help";
 import LoaderBox from "../loader/loader-box";
 import Profile from "../profile/profile";
 import CreateTransaction from "../transaction/create-transaction";
@@ -102,6 +103,10 @@ const Modal = () => {
     case "activities":
       modalData.width = "medium";
       modalData.content = <Activities onClose={handleCloseModal} />;
+      break;
+    case "help":
+      modalData.width = "medium";
+      modalData.content = <Help onClose={handleCloseModal} />;
       break;
   }
 

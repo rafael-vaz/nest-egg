@@ -32,6 +32,9 @@ const ToolMenuItem = ({ id, icon: Icon, text }: IToolMenuItemProps) => {
       case "activities":
         dispatch(openModalState({ id: "activities" }));
         break;
+      case "help":
+        dispatch(openModalState({ id: "help" }));
+        break;
     }
   }
   return (

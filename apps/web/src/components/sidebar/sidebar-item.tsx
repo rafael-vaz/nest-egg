@@ -53,8 +53,8 @@ const SidebarItem = ({
       case "create":
         dispatch(openModalState({ id: "create" }));
         break;
-      case "info":
-        navigate("/info");
+      case "help":
+        dispatch(openModalState({ id: "help" }));
         break;
       case "home":
         navigate("/home");
