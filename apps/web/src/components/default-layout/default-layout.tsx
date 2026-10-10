@@ -5,6 +5,7 @@ import ResourceMenu from "../resource-menu/resource-menu";
 import Sidebar from "../sidebar/sidebar";
 import ToolMenuButton from "../tool-menu/tool-menu-button";
 import Topbar from "../topbar/topbar";
+import TutorialTour from "../tutorial/tutorial-tour";
 
 const DefaultLayout = () => {
   return (
@@ -16,6 +17,7 @@ const DefaultLayout = () => {
       </MainContainer>
       <ToolMenuButton />
       <ResourceMenu />
+      <TutorialTour />
     </>
   );
 };
