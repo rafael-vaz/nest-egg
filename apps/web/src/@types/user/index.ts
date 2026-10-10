@@ -12,6 +12,7 @@ export interface IUser {
   dateOfBirth: Date | string;
   wallet: number;
   walletUpdatedAt?: string;
+  hasSeenTutorial?: boolean;
 }
 
 export interface IUserFinancesSlice {
