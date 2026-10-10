@@ -9,6 +9,7 @@ import modal from "./reducers/modal/modal";
 import recurrenceDate from "./reducers/recurrence-date/recurrence-date";
 import toolMenu from "./reducers/tool-menu/tool-menu";
 import transactionData from "./reducers/transaction/transaction-data";
+import tutorial from "./reducers/tutorial/tutorial";
 import userAuth from "./reducers/user/user-auth";
 import userData from "./reducers/user/user-data";
 import userFile from "./reducers/user/user-file";
@@ -28,5 +29,6 @@ const reducer = combineReducers({
   announcement,
   recurrenceDate,
   toolMenu,
+  tutorial,
 });
 export default reducer;
