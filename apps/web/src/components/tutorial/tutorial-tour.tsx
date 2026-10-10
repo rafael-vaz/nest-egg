@@ -23,6 +23,7 @@ const TutorialTour = () => {
       showProgress: true,
       buttons: ["close", "back", "primary", "skip"],
       closeButtonAction: "skip",
+      skipBeacon: true,
       backgroundColor: "var(--ne-c7)",
       primaryColor: "var(--ne-c11)",
       textColor: "var(--ne-c1)",
@@ -43,7 +44,11 @@ const TutorialTour = () => {
         dispatch(stopTutorial());
         if (authUser?.uid) {
           dispatch(
-            updateUserThunk({ uid: authUser.uid, hasSeenTutorial: true }),
+            updateUserThunk({
+              uid: authUser.uid,
+              hasSeenTutorial: true,
+              hasAlert: false,
+            }),
           );
           dispatch(updateAuthUser({ hasSeenTutorial: true }));
         }

@@ -39,7 +39,6 @@ const HelpFaq = ({ onClose }: IHelpFaqProps) => {
             <Button
               icon={PlayCircle}
               color="light-gray"
-              size="small"
               text="Tutorial"
               aria-label="Iniciar tutorial guiado"
               onClick={handleStartTutorial}
