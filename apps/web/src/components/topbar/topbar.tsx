@@ -18,6 +18,7 @@ const Topbar = () => {
     <div className={styles.topbar}>
       <div className={styles.topbarButtons}>
         <Button
+          id="topbar-wallet-button"
           icon={Wallet}
           color="green"
           text={
@@ -30,6 +31,7 @@ const Topbar = () => {
           onClick={() => navigate("wallet")}
         />
         <Button
+          id="topbar-goals-button"
           icon={ListChecks}
           color="dark-gray"
           text="Ver Metas"
@@ -38,6 +40,7 @@ const Topbar = () => {
           onClick={() => navigate("goals")}
         />
         <Button
+          id="topbar-create-button"
           icon={Plus}
           color="dark-gray"
           title="Criar"

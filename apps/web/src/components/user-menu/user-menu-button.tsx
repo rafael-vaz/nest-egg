@@ -14,6 +14,7 @@ const UserMenuButton = ({ active, onClick, ...props }: IUserMenuButton) => {
   const { authUser } = useSelector((state: RootState) => state.userAuth);
   return (
     <button
+      id="user-menu-button"
       className={`${styles.userMenuButton} ${sidebarItemStyles.sidebarItem}`}
       aria-label={`${active ? "Fechar" : "Abrir"} opções do usuário`}
       aria-controls="user-options-list"
