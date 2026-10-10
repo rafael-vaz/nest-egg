@@ -38,6 +38,7 @@ const TutorialTour = () => {
     options: {
       closeButtonAction: "skip",
       skipBeacon: true,
+      skipScroll: true,
       spotlightPadding: 4,
       overlayColor: "rgba(0, 0, 0, 0.6)",
       arrowColor: "var(--ne-c7)",
