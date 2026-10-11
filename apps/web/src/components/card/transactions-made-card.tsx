@@ -1,14 +1,20 @@
-import { DatesRangeValue } from "@mantine/dates";
 import { ChartCandlestick } from "lucide-react";
 import React from "react";
+import { useSelector } from "react-redux";
 
+import { RootState } from "../../store/configure-store";
+import getLastMonthsRanges from "../../utils/date/get-last-months-ranges";
+import getTransactionOccurrences from "../../utils/transaction/get-transaction-occurrences";
+import sumOccurrencesByType from "../../utils/transaction/sum-occurrences-by-type";
 import StackedAreaChart from "../charts/stacked-area-chart";
 import Card from "./card";
 
+const MONTHS_TO_SHOW = 6;
+
 const TransactionsMadeCard = () => {
-  const [filteredData, setFilteredData] = React.useState<
-    DatesRangeValue<string>
-  >([null, null]);
+  const { transactions } = useSelector(
+    (state: RootState) => state.userFinances,
+  );
 
   const keys = [
     { id: "credit", color: "#15f5ba" },
@@ -20,51 +26,24 @@ const TransactionsMadeCard = () => {
     credit: "Crédito",
   } as const;
 
-  React.useEffect(() => {
-    /*  console.log(filteredData); */
-  }, [filteredData]);
-
-  const data = [
-    {
-      name: "Page A",
-      debt: 1200,
-      credit: 800,
-    },
-    {
-      name: "Page B",
-      debt: 2200,
-      credit: 1500,
-    },
-    {
-      name: "Page C",
-      debt: 1800,
-      credit: 3200,
-    },
-    {
-      name: "Page D",
-      debt: 2500,
-      credit: 2100,
-    },
-    {
-      name: "Page E",
-      debt: 3000,
-      credit: 4000,
-    },
-    {
-      name: "Page F",
-      debt: 2800,
-      credit: 3500,
-    },
-    {
-      name: "Page G",
-      debt: 3500,
-      credit: 5000,
-    },
-  ];
-
-  function onFilterChange(value: DatesRangeValue<string>) {
-    setFilteredData(value);
-  }
+  const data = React.useMemo(() => {
+    const occurrences = getTransactionOccurrences(transactions);
+    return getLastMonthsRanges(MONTHS_TO_SHOW).map((range) => ({
+      name: range.label,
+      credit: sumOccurrencesByType(
+        occurrences,
+        "credit",
+        range.firstDay,
+        range.lastDay,
+      ),
+      debt: sumOccurrencesByType(
+        occurrences,
+        "debt",
+        range.firstDay,
+        range.lastDay,
+      ),
+    }));
+  }, [transactions]);
 
   return (
     <Card
@@ -72,7 +51,6 @@ const TransactionsMadeCard = () => {
       title="Transações realizadas"
       icon={ChartCandlestick}
       hasFilter={true}
-      onFilterChange={onFilterChange}
     >
       <StackedAreaChart keys={keys} data={data} translations={translations} />
     </Card>

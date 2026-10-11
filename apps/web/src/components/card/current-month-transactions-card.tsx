@@ -1,8 +1,14 @@
 import { BanknoteArrowDown, BanknoteArrowUp } from "lucide-react";
+import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { TransactionType } from "../../@types/transaction";
+import { RootState } from "../../store/configure-store";
 import getCurrentMonthRange from "../../utils/date/get-current-month-range";
+import formatCurrency from "../../utils/text/format-currency";
+import filterOccurrencesByRange from "../../utils/transaction/filter-occurrences-by-range";
+import getTransactionOccurrences from "../../utils/transaction/get-transaction-occurrences";
 import getTransactionTypeById from "../../utils/transaction/get-transaction-type-by-id";
 import Card from "./card";
 import cardStyles from "./card.module.css";
@@ -16,19 +22,24 @@ interface ICurrentMonthTransactionsCardProps {
 const CurrentMonthTransactionsCard = ({
   type,
 }: ICurrentMonthTransactionsCardProps) => {
+  const { transactions } = useSelector(
+    (state: RootState) => state.userFinances,
+  );
   const currentMonthRange = getCurrentMonthRange();
-  const transactionsMap = {
-    credit: {
-      value: "R$ 7.200,00",
-      recurrence: 2,
-      updated: "1 semana",
-    },
-    debt: {
-      value: "R$ 800,00",
-      recurrence: 14,
-      updated: "3 semanas",
-    },
-  };
+
+  const { total, count } = React.useMemo(() => {
+    const occurrences = filterOccurrencesByRange(
+      getTransactionOccurrences(transactions),
+      currentMonthRange.firstDay,
+      currentMonthRange.lastDay,
+    ).filter((occurrence) => occurrence.type === type);
+
+    return {
+      total: occurrences.reduce((sum, occurrence) => sum + occurrence.value, 0),
+      count: occurrences.length,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactions, type]);
 
   return (
     <Card
@@ -41,10 +52,10 @@ const CurrentMonthTransactionsCard = ({
         <h3
           className={`${cardStyles.cardEmphasisText} ${styles.currentMonthTransactionsCardTitle}`}
         >
-          {transactionsMap[type].value}
+          {formatCurrency(`${total}`)}
         </h3>
         <p className={styles.currentMonthTransactionsCardRecurringTransactions}>
-          {`${transactionsMap[type].recurrence} transações realizadas`}
+          {`${count} transações realizadas`}
         </p>
       </div>
       <Link

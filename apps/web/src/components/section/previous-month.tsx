@@ -1,13 +1,33 @@
 import { motion } from "motion/react";
+import React from "react";
+import { useSelector } from "react-redux";
 
 import slideUpVariants from "../../motion/slide-up-variants";
+import { RootState } from "../../store/configure-store";
 import previousMonthCardsMap from "../../templates/previous-month-cards-map";
+import getPreviousMonthRange from "../../utils/date/get-previous-month-range";
+import formatCurrency from "../../utils/text/format-currency";
+import getTransactionOccurrences from "../../utils/transaction/get-transaction-occurrences";
+import sumOccurrencesByType from "../../utils/transaction/sum-occurrences-by-type";
 import Card from "../card/card";
 import cardStyles from "../card/card.module.css";
 import Section from "./section";
 import styles from "./section.module.css";
 
 const PreviousMonth = () => {
+  const { transactions } = useSelector(
+    (state: RootState) => state.userFinances,
+  );
+
+  const totalsByType = React.useMemo(() => {
+    const { firstDay, lastDay } = getPreviousMonthRange();
+    const occurrences = getTransactionOccurrences(transactions);
+    return {
+      credit: sumOccurrencesByType(occurrences, "credit", firstDay, lastDay),
+      debt: sumOccurrencesByType(occurrences, "debt", firstDay, lastDay),
+    };
+  }, [transactions]);
+
   const cards = previousMonthCardsMap.map((card, index) => {
     return (
       <motion.li
@@ -25,7 +45,9 @@ const PreviousMonth = () => {
           iconColor={card.transactionType === "credit" ? "green" : "red"}
         >
           <div className={cardStyles.cardEmphasisContainer}>
-            <h3 className={cardStyles.cardEmphasisText}>R$ 0.000,00</h3>
+            <h3 className={cardStyles.cardEmphasisText}>
+              {formatCurrency(`${totalsByType[card.transactionType]}`)}
+            </h3>
           </div>
         </Card>
       </motion.li>
