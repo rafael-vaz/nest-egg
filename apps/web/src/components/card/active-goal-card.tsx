@@ -10,6 +10,7 @@ import calculateGoalProgress from "../../utils/goal/calculate-goal-progress";
 import formatCurrency from "../../utils/text/format-currency";
 import CircularProgress from "../circular-progress/circular-progress";
 import ToolMenuEmptyList from "../tool-menu/tool-menu-empty-list";
+import activeGoalCardStyle from "./active-goal-card.module.css";
 import Card from "./card";
 import styles from "./circular-progress-card.module.css";
 
@@ -29,9 +30,7 @@ const ActiveGoalCard = () => {
     if (hasShownAchievement.current || !authUser?.uid || !activeGoal) return;
     if (shouldShowAchievementModal(progress, authUser.hasSeenAchievement)) {
       hasShownAchievement.current = true;
-      dispatch(
-        openModalState({ id: "achievement", entity: activeGoal.name }),
-      );
+      dispatch(openModalState({ id: "achievement", entity: activeGoal.name }));
     }
   }, [progress, activeGoal, authUser, dispatch]);
 
@@ -65,7 +64,13 @@ const ActiveGoalCard = () => {
           </Link>
         </>
       ) : (
-        <ToolMenuEmptyList text="Nenhuma meta ativa no momento." />
+        <div className={activeGoalCardStyle.emptyActiveGoal}>
+          <p>
+            Acesse sua <Link to="/goals">lista de metas</Link> e selecione ou
+            crie uma nova meta para ativar.
+          </p>
+          <ToolMenuEmptyList text="Nenhuma meta ativa no momento." />
+        </div>
       )}
     </Card>
   );
