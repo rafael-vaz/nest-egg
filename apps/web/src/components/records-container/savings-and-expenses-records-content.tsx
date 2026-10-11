@@ -1,12 +1,16 @@
 import { DatesRangeValue } from "@mantine/dates";
 import { BrushCleaning, MoveDown, MoveUp } from "lucide-react";
 import React from "react";
+import { useSelector } from "react-redux";
 
 import { ISavingsAndExpenses } from "../../@types/savings-and-expenses";
-import { useAppDispatch } from "../../store/configure-store";
+import { RootState, useAppDispatch } from "../../store/configure-store";
 import { clearAndSetAnnouncementContent } from "../../store/reducers/announcement/announcement-data";
 import { monthsMap } from "../../templates/months-map";
+import parseLocalDate from "../../utils/date/parse-local-date";
 import formatCurrency from "../../utils/text/format-currency";
+import getTransactionOccurrences from "../../utils/transaction/get-transaction-occurrences";
+import sumOccurrencesByType from "../../utils/transaction/sum-occurrences-by-type";
 import Button from "../button/button";
 import CategoryAndPercentagePicker, {
   ICategoryAndPercentagePickerValue,
@@ -22,8 +26,15 @@ import TableRow from "../table/table-row";
 import styles from "./records-container.module.css";
 import RecordsContainerEmptyList from "./records-container-empty-list";
 
+function formatMonthDate(year: number, month: number, day: number): string {
+  return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
 const SavingsAndExpensesRecordsContent = () => {
   const dispatch = useAppDispatch();
+  const { transactions, loading } = useSelector(
+    (state: RootState) => state.userFinances,
+  );
   const [filteredStatus, setFilteredStatus] = React.useState(false);
   const [categoryAndPercentageValue, setCategoryAndPercentageValue] =
     React.useState({
@@ -111,254 +122,59 @@ const SavingsAndExpensesRecordsContent = () => {
     "Gasto (R$)",
   ];
 
-  const savingsAndExpensesData: ISavingsAndExpenses[] = [
-    {
-      year: 2023,
-      month: 0,
-      total: 4500,
-      savings: 1200,
-      expenses: 3300,
-      savingsPercentage: 27,
-      expensesPercentage: 73,
-    },
-    {
-      year: 2023,
-      month: 1,
-      total: 4700,
-      savings: 1300,
-      expenses: 3400,
-      savingsPercentage: 28,
-      expensesPercentage: 72,
-    },
-    {
-      year: 2023,
-      month: 2,
-      total: 4900,
-      savings: 1100,
-      expenses: 3800,
-      savingsPercentage: 22,
-      expensesPercentage: 78,
-    },
-    {
-      year: 2023,
-      month: 3,
-      total: 5100,
-      savings: 1400,
-      expenses: 3700,
-      savingsPercentage: 27,
-      expensesPercentage: 73,
-    },
-    {
-      year: 2023,
-      month: 4,
-      total: 5300,
-      savings: 1500,
-      expenses: 3800,
-      savingsPercentage: 28,
-      expensesPercentage: 72,
-    },
-    {
-      year: 2023,
-      month: 5,
-      total: 5500,
-      savings: 1600,
-      expenses: 3900,
-      savingsPercentage: 29,
-      expensesPercentage: 71,
-    },
-    {
-      year: 2024,
-      month: 0,
-      total: 5800,
-      savings: 1700,
-      expenses: 4100,
-      savingsPercentage: 29,
-      expensesPercentage: 71,
-    },
-    {
-      year: 2024,
-      month: 1,
-      total: 5600,
-      savings: 1500,
-      expenses: 4100,
-      savingsPercentage: 27,
-      expensesPercentage: 73,
-    },
-    {
-      year: 2024,
-      month: 2,
-      total: 6000,
-      savings: 2000,
-      expenses: 4000,
-      savingsPercentage: 33,
-      expensesPercentage: 67,
-    },
-    {
-      year: 2024,
-      month: 3,
-      total: 6200,
-      savings: 2100,
-      expenses: 4100,
-      savingsPercentage: 34,
-      expensesPercentage: 66,
-    },
-    {
-      year: 2024,
-      month: 4,
-      total: 6400,
-      savings: 1900,
-      expenses: 4500,
-      savingsPercentage: 30,
-      expensesPercentage: 70,
-    },
-    {
-      year: 2024,
-      month: 5,
-      total: 6600,
-      savings: 2200,
-      expenses: 4400,
-      savingsPercentage: 33,
-      expensesPercentage: 67,
-    },
-    {
-      year: 2024,
-      month: 6,
-      total: 6800,
-      savings: 2300,
-      expenses: 4500,
-      savingsPercentage: 34,
-      expensesPercentage: 66,
-    },
-    {
-      year: 2024,
-      month: 7,
-      total: 7000,
-      savings: 2400,
-      expenses: 4600,
-      savingsPercentage: 34,
-      expensesPercentage: 66,
-    },
-    {
-      year: 2024,
-      month: 8,
-      total: 7200,
-      savings: 2500,
-      expenses: 4700,
-      savingsPercentage: 35,
-      expensesPercentage: 65,
-    },
-    {
-      year: 2025,
-      month: 0,
-      total: 7400,
-      savings: 2600,
-      expenses: 4800,
-      savingsPercentage: 35,
-      expensesPercentage: 65,
-    },
-    {
-      year: 2025,
-      month: 1,
-      total: 7600,
-      savings: 2700,
-      expenses: 4900,
-      savingsPercentage: 36,
-      expensesPercentage: 64,
-    },
-    {
-      year: 2025,
-      month: 2,
-      total: 7800,
-      savings: 2800,
-      expenses: 5000,
-      savingsPercentage: 36,
-      expensesPercentage: 64,
-    },
-    {
-      year: 2025,
-      month: 3,
-      total: 8000,
-      savings: 2900,
-      expenses: 5100,
-      savingsPercentage: 36,
-      expensesPercentage: 64,
-    },
-    {
-      year: 2025,
-      month: 4,
-      total: 8300,
-      savings: 3100,
-      expenses: 5200,
-      savingsPercentage: 37,
-      expensesPercentage: 63,
-    },
-    {
-      year: 2025,
-      month: 5,
-      total: 8500,
-      savings: 3300,
-      expenses: 5200,
-      savingsPercentage: 39,
-      expensesPercentage: 61,
-    },
-    {
-      year: 2025,
-      month: 6,
-      total: 8700,
-      savings: 3400,
-      expenses: 5300,
-      savingsPercentage: 39,
-      expensesPercentage: 61,
-    },
-    {
-      year: 2025,
-      month: 7,
-      total: 8900,
-      savings: 3200,
-      expenses: 5700,
-      savingsPercentage: 36,
-      expensesPercentage: 64,
-    },
-    {
-      year: 2025,
-      month: 8,
-      total: 9100,
-      savings: 3500,
-      expenses: 5600,
-      savingsPercentage: 38,
-      expensesPercentage: 62,
-    },
-    {
-      year: 2025,
-      month: 9,
-      total: 9300,
-      savings: 3600,
-      expenses: 5700,
-      savingsPercentage: 39,
-      expensesPercentage: 61,
-    },
-    {
-      year: 2025,
-      month: 10,
-      total: 9500,
-      savings: 3800,
-      expenses: 5700,
-      savingsPercentage: 40,
-      expensesPercentage: 60,
-    },
-    {
-      year: 2025,
-      month: 11,
-      total: 9700,
-      savings: 4000,
-      expenses: 5700,
-      savingsPercentage: 41,
-      expensesPercentage: 59,
-    },
-  ];
+  const savingsAndExpensesData = React.useMemo<ISavingsAndExpenses[]>(() => {
+    const occurrences = getTransactionOccurrences(transactions);
+
+    const monthKeys = new Set<string>();
+    occurrences.forEach((occurrence) => {
+      const date = parseLocalDate(occurrence.date);
+      monthKeys.add(`${date.getFullYear()}-${date.getMonth()}`);
+    });
+
+    return Array.from(monthKeys)
+      .map((key) => {
+        const [yearText, monthText] = key.split("-");
+        const year = Number(yearText);
+        const month = Number(monthText);
+        const firstDay = formatMonthDate(year, month, 1);
+        const lastDay = formatMonthDate(
+          year,
+          month,
+          new Date(year, month + 1, 0).getDate(),
+        );
+
+        const savings = sumOccurrencesByType(
+          occurrences,
+          "credit",
+          firstDay,
+          lastDay,
+        );
+        const expenses = sumOccurrencesByType(
+          occurrences,
+          "debt",
+          firstDay,
+          lastDay,
+        );
+        const total = savings + expenses;
+        const savingsPercentage =
+          total > 0 ? Math.round((savings / total) * 100) : 0;
+        const expensesPercentage = total > 0 ? 100 - savingsPercentage : 0;
+
+        return {
+          year,
+          month,
+          total,
+          savings,
+          expenses,
+          savingsPercentage,
+          expensesPercentage,
+        };
+      })
+      .sort((a, b) => a.year - b.year || a.month - b.month);
+  }, [transactions]);
 
   const filteredSavingsAndExpenses = React.useMemo(() => {
-    let filtered = savingsAndExpensesData;
+    let filtered: ISavingsAndExpenses[] = savingsAndExpensesData;
     const [startDate, endDate] = monthInterval;
 
     if (filtered) {
@@ -379,7 +195,7 @@ const SavingsAndExpensesRecordsContent = () => {
         filtered = filtered.filter((item) => {
           const formatedStartDate = startDate ? new Date(startDate) : null;
           const formatedEndDate = endDate ? new Date(endDate) : null;
-          const date = new Date(`${item.year}-0${item.month + 1}-01`);
+          const date = parseLocalDate(formatMonthDate(item.year, item.month, 1));
           const afterStart = !formatedStartDate || date >= formatedStartDate;
           const beforeEnd = !formatedEndDate || date <= formatedEndDate;
           return afterStart && beforeEnd;
@@ -402,8 +218,12 @@ const SavingsAndExpensesRecordsContent = () => {
       }
     }
     return filtered ?? [];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [monetaryInterval, monthInterval, categoryAndPercentageValue]);
+  }, [
+    savingsAndExpensesData,
+    monetaryInterval,
+    monthInterval,
+    categoryAndPercentageValue,
+  ]);
 
   return (
     <>
@@ -486,9 +306,11 @@ const SavingsAndExpensesRecordsContent = () => {
         ) : (
           <RecordsContainerEmptyList
             text={`${
-              savingsAndExpensesData && savingsAndExpensesData.length > 0
-                ? "Nenhum item encontrado para o filtro selecionado."
-                : "Sua lista de poupanças e gastos está vazia."
+              loading
+                ? "Carregando lista de poupanças e gastos..."
+                : savingsAndExpensesData && savingsAndExpensesData.length > 0
+                  ? "Nenhum item encontrado para o filtro selecionado."
+                  : "Sua lista de poupanças e gastos está vazia."
             }`}
           />
         )}
