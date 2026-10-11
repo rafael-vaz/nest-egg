@@ -28,20 +28,23 @@ const SavingsAndExpensesCard = () => {
 
   const data = React.useMemo(() => {
     const occurrences = getTransactionOccurrences(transactions);
+    // values are stored as centavos; convert to reais for the chart
     return getLastMonthsRanges(MONTHS_TO_SHOW).map((range) => ({
       name: range.label,
-      savings: sumOccurrencesByType(
-        occurrences,
-        "credit",
-        range.firstDay,
-        range.lastDay,
-      ),
-      expenses: sumOccurrencesByType(
-        occurrences,
-        "debt",
-        range.firstDay,
-        range.lastDay,
-      ),
+      savings:
+        sumOccurrencesByType(
+          occurrences,
+          "credit",
+          range.firstDay,
+          range.lastDay,
+        ) / 100,
+      expenses:
+        sumOccurrencesByType(
+          occurrences,
+          "debt",
+          range.firstDay,
+          range.lastDay,
+        ) / 100,
     }));
   }, [transactions]);
 
