@@ -13,6 +13,8 @@ export interface IUser {
   wallet: number;
   walletUpdatedAt?: string;
   hasSeenTutorial?: boolean;
+  hasSeenWelcome?: boolean;
+  hasSeenAchievement?: boolean;
 }
 
 export interface IUserFinancesSlice {

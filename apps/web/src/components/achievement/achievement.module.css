@@ -1,0 +1,32 @@
+.achievement {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.achievementMessage {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ne-c3);
+}
+
+.achievementActions {
+  margin-top: 0.5rem;
+}
+
+.achievementConfetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.achievementConfettiPiece {
+  position: absolute;
+  top: 0;
+  border-radius: 0.125rem;
+}

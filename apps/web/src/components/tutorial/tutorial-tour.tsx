@@ -3,22 +3,23 @@ import { STATUS, useJoyride } from "react-joyride";
 import { useSelector } from "react-redux";
 
 import { RootState, useAppDispatch } from "../../store/configure-store";
+import { openModalState } from "../../store/reducers/modal/modal";
 import { closeToolMenuState } from "../../store/reducers/tool-menu/tool-menu";
-import { startTutorial, stopTutorial } from "../../store/reducers/tutorial/tutorial";
+import { stopTutorial } from "../../store/reducers/tutorial/tutorial";
 import { updateAuthUser } from "../../store/reducers/user/user-auth";
 import { updateUserThunk } from "../../store/thunks/user/user-data";
 import {
   desktopTutorialSteps,
   mobileTutorialSteps,
 } from "../../templates/tutorial-steps-map";
-import { shouldAutoStartTutorial } from "../../utils/tutorial/should-auto-start-tutorial";
+import { shouldShowWelcomeModal } from "../../utils/welcome/should-show-welcome";
 import TutorialTooltip from "./tutorial-tooltip";
 
 const TutorialTour = () => {
   const dispatch = useAppDispatch();
   const { run } = useSelector((state: RootState) => state.tutorial);
   const { authUser } = useSelector((state: RootState) => state.userAuth);
-  const hasAutoStarted = React.useRef(false);
+  const hasOfferedWelcome = React.useRef(false);
   const [isDesktopViewport, setIsDesktopViewport] = React.useState(
     () => window.matchMedia("(min-width: 31.25rem)").matches,
   );
@@ -75,11 +76,11 @@ const TutorialTour = () => {
   });
 
   React.useEffect(() => {
-    if (hasAutoStarted.current || !authUser?.uid) return;
+    if (hasOfferedWelcome.current || !authUser?.uid) return;
 
-    if (shouldAutoStartTutorial(authUser.hasSeenTutorial)) {
-      hasAutoStarted.current = true;
-      dispatch(startTutorial());
+    if (shouldShowWelcomeModal(authUser.hasSeenWelcome)) {
+      hasOfferedWelcome.current = true;
+      dispatch(openModalState({ id: "welcome" }));
     }
   }, [authUser, dispatch]);
 

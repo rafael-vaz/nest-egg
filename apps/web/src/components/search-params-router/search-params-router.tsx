@@ -15,7 +15,7 @@ const SearchParamsRouter = () => {
   const { filters } = useFiltersQueryParams();
 
   React.useEffect(() => {
-    if (modal) {
+    if (modal && modal !== "achievement") {
       if (filters.id && modal.includes("update")) {
         dispatch(openModalState({ id: modal as ModalId, entity: filters.id }));
       } else {

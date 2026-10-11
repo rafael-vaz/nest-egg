@@ -11,6 +11,7 @@ import {
 import slideDownVariants from "../../motion/slide-down-variants";
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { closeModalState } from "../../store/reducers/modal/modal";
+import Achievement from "../achievement/achievement";
 import Activities from "../activities/activities";
 import Calculator from "../calculator/calculator";
 import CreateCollection from "../collection/create-collection";
@@ -23,6 +24,7 @@ import LoaderBox from "../loader/loader-box";
 import Profile from "../profile/profile";
 import CreateTransaction from "../transaction/create-transaction";
 import UpdateTransaction from "../transaction/update-transaction";
+import Welcome from "../welcome/welcome";
 import styles from "./modal.module.css";
 import ModalBackground from "./modal-background";
 import ModalContent from "./modal-content";
@@ -108,12 +110,22 @@ const Modal = () => {
       modalData.width = "medium";
       modalData.content = <Help onClose={handleCloseModal} />;
       break;
+    case "welcome":
+      modalData.width = "medium";
+      modalData.content = <Welcome onClose={handleCloseModal} />;
+      break;
+    case "achievement":
+      modalData.width = "medium";
+      modalData.content = (
+        <Achievement goalName={entity ?? undefined} onClose={handleCloseModal} />
+      );
+      break;
   }
 
   React.useEffect(() => {
     if (modalRef.current && isOpen && id) {
       openModal(id);
-      if (entity) setFilters({ id: entity });
+      if (entity && id !== "achievement") setFilters({ id: entity });
       const modalElement = modalRef.current as HTMLElement;
       const timeout = setTimeout(() => {
         modalElement.focus();
