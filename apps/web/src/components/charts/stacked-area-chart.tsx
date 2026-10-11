@@ -65,7 +65,6 @@ const StackedAreaChart = <K extends string>({
                 key={key.id}
                 type="monotone"
                 dataKey={key.id}
-                stackId="1"
                 stroke={key.color}
                 fill={hexToRgba(key.color, 0.2)}
               />
