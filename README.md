@@ -33,6 +33,8 @@ month, organize spending into goals and collections, and see your wallet
 balance update automatically as those transactions occur — no manual
 bookkeeping required.
 
+<a id="overview"></a>
+
 ## 💻 Overview
 
 The product is a single-page web application backed by Firebase. Recurring
@@ -58,6 +60,8 @@ automated side only ever applies relative deltas.
 - Search across transactions, goals and collections.
 - User profile management, including account deletion.
 
+<a id="tech-stack"></a>
+
 ## 🧰 Tech stack
 
 | Layer               | Technology                                                        |
@@ -66,6 +70,8 @@ automated side only ever applies relative deltas.
 | Backend              | Firebase Cloud Functions (v2), TypeScript                          |
 | Data and auth        | Firebase Firestore, Firebase Authentication, Firebase Storage      |
 | UI                    | Mantine, PrimeReact, TinyMCE, Recharts                              |
+
+<a id="repository-structure"></a>
 
 ## 📂 Repository structure
 
@@ -88,6 +94,8 @@ structure, lives in [`docs/`](docs):
 - [`docs/architecture.md`](docs/architecture.md) — directory layout,
   workspace responsibilities, and known limitations.
 - [`docs/decisions/`](docs/decisions) — architecture decision records.
+
+<a id="getting-started"></a>
 
 ## 🔧 Getting started
 
@@ -134,6 +142,8 @@ npm run dev -w apps/web
 
 Starts the Vite development server for the web app.
 
+<a id="available-scripts"></a>
+
 ## ⚙️ Available scripts
 
 ### Root
@@ -179,6 +189,8 @@ rules (`firestore.rules`) restrict every read and write to the owning
 authenticated user; the `walletLedger` subcollection, which backs the wallet
 reconciliation logic, is writable only by the Cloud Functions (Admin SDK)
 and is not intended to be written by clients.
+
+<a id="documentation"></a>
 
 ## 📖 Documentation
 
