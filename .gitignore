@@ -16,6 +16,7 @@ node_modules/
 dist
 dist-ssr
 apps/functions/lib
+coverage
 
 # Environment variables
 .env
