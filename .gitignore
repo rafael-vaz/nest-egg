@@ -17,6 +17,7 @@ dist
 dist-ssr
 apps/functions/lib
 coverage
+*.tsbuildinfo
 
 # Environment variables
 .env
