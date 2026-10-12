@@ -1,16 +1,39 @@
-# nest-egg
+<h1 align="center">
+	<img src="apps/web/public/img/logo.svg" alt="nest-egg" width="110" />
+</h1>
 
-Live at [nest-egg-ef466.web.app](https://nest-egg-ef466.web.app).
+<p align="center">
+	A personal finance tracker for managing day-to-day transactions and keeping an accurate, always up-to-date view of your wallet balance.
+</p>
 
-A personal finance tracker for managing day-to-day transactions and keeping
-an accurate, always up-to-date view of your wallet balance.
+<p align="center">
+	<a href="https://nest-egg-ef466.web.app">
+		<img src="https://img.shields.io/badge/Deploy-Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white" alt="Deploy Firebase" />
+	</a>
+	<img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React 19" />
+	<img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5" />
+	<img src="https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 6" />
+</p>
+
+<p align="center">
+	<img src="apps/web/public/img/mock.png" alt="nest-egg application preview" width="100%" />
+</p>
+
+<p align="center">
+	<a href="#overview">Overview</a> •
+	<a href="#tech-stack">Tech stack</a> •
+	<a href="#repository-structure">Structure</a> •
+	<a href="#getting-started">Getting started</a> •
+	<a href="#available-scripts">Scripts</a> •
+	<a href="#documentation">Documentation</a>
+</p>
 
 nest-egg lets you register one-off or recurring transactions throughout the
 month, organize spending into goals and collections, and see your wallet
 balance update automatically as those transactions occur — no manual
 bookkeeping required.
 
-## Overview
+## 💻 Overview
 
 The product is a single-page web application backed by Firebase. Recurring
 transactions (for example, a monthly subscription or a weekly allowance) are
@@ -35,7 +58,7 @@ automated side only ever applies relative deltas.
 - Search across transactions, goals and collections.
 - User profile management, including account deletion.
 
-## Tech stack
+## 🧰 Tech stack
 
 | Layer               | Technology                                                        |
 | -------------------- | ------------------------------------------------------------------ |
@@ -44,7 +67,7 @@ automated side only ever applies relative deltas.
 | Data and auth        | Firebase Firestore, Firebase Authentication, Firebase Storage      |
 | UI                    | Mantine, PrimeReact, TinyMCE, Recharts                              |
 
-## Repository structure
+## 📂 Repository structure
 
 This is an npm-workspaces monorepo:
 
@@ -66,7 +89,7 @@ structure, lives in [`docs/`](docs):
   workspace responsibilities, and known limitations.
 - [`docs/decisions/`](docs/decisions) — architecture decision records.
 
-## Getting started
+## 🔧 Getting started
 
 ### Prerequisites
 
@@ -111,7 +134,7 @@ npm run dev -w apps/web
 
 Starts the Vite development server for the web app.
 
-## Available scripts
+## ⚙️ Available scripts
 
 ### Root
 
@@ -148,7 +171,7 @@ Starts the Vite development server for the web app.
 | ------------------------------------------ | ----------------------- |
 | `npm run build -w packages/shared-types`   | Compile TypeScript      |
 
-## Data model and security
+## 🔒 Data model and security
 
 User data is stored under `nest-egg-users/{userId}` and its subcollections
 (`transactions`, `goals`, `collections`, `walletLedger`). Firestore security
@@ -157,19 +180,23 @@ authenticated user; the `walletLedger` subcollection, which backs the wallet
 reconciliation logic, is writable only by the Cloud Functions (Admin SDK)
 and is not intended to be written by clients.
 
-## Documentation
+## 📖 Documentation
 
 - [`docs/architecture.md`](docs/architecture.md) — architecture overview
 - [`docs/decisions/`](docs/decisions) — architecture decision records
 - [`docs/tasks/`](docs/tasks) — task records for structural work done on the
   repository
 
-## Contributing
+## 🚀 Deploy
+
+Access the live version at: [nest-egg-ef466.web.app](https://nest-egg-ef466.web.app).
+
+## 🤝 Contributing
 
 This is a personal project, but issues and pull requests are welcome. Please
 open an issue to discuss any significant change before submitting a pull
 request.
 
-## License
+## 📄 License
 
 This project is licensed under the terms of the [MIT License](LICENSE).
