@@ -15,6 +15,7 @@ const ResourceMenu = () => {
           aria-label="Baixar relatório"
           size="small"
           icon={Download}
+          onClick={() => dispatch(openModalState({ id: "export-report" }))}
         />
       </li>
       <li>

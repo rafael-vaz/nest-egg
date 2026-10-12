@@ -1,0 +1,82 @@
+.exportReport {
+  display: flex;
+  flex-direction: column;
+}
+
+.entitySection {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.25rem;
+}
+
+.entityHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.selectAllLink {
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  color: var(--ne-c11);
+  font-family: inherit;
+  font-size: 0.875rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.selectAllLink:hover {
+  transition: 0.2s;
+  color: var(--ne-c12);
+}
+
+.entityList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.entityOption {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 2.75rem;
+  padding: 0 0.875rem;
+  border-radius: 0.625rem;
+  background-color: var(--ne-c7);
+  border: 1px solid var(--ne-c6);
+  color: var(--ne-c1);
+  font-size: 0.9375rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.entityOption[data-selected="true"] {
+  background-color: var(--ne-c8);
+}
+
+.entityOption:focus {
+  box-shadow: none !important;
+  border-color: var(--ne-c12);
+}
+
+.entityOptionLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.entityIcon {
+  color: var(--ne-c11);
+  flex-shrink: 0;
+}
+
+.checkSelected {
+  color: var(--success);
+}
+
+.checkUnselected {
+  color: var(--ne-c5);
+}

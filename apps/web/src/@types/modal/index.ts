@@ -13,6 +13,7 @@ export const modalIds = [
   "help",
   "welcome",
   "achievement",
+  "export-report",
 ] as const;
 
 export const confirmationModalId = [

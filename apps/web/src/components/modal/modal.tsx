@@ -22,6 +22,7 @@ import UpdateGoal from "../goal/update-goal";
 import Help from "../help/help";
 import LoaderBox from "../loader/loader-box";
 import Profile from "../profile/profile";
+import ExportReport from "../report/export-report";
 import CreateTransaction from "../transaction/create-transaction";
 import UpdateTransaction from "../transaction/update-transaction";
 import Welcome from "../welcome/welcome";
@@ -119,6 +120,10 @@ const Modal = () => {
       modalData.content = (
         <Achievement goalName={entity ?? undefined} onClose={handleCloseModal} />
       );
+      break;
+    case "export-report":
+      modalData.width = "medium";
+      modalData.content = <ExportReport onClose={handleCloseModal} />;
       break;
   }
 
