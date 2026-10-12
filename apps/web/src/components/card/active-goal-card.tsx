@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { openModalState } from "../../store/reducers/modal/modal";
+import { updateGoalThunk } from "../../store/thunks/goal/goal-data";
 import { shouldShowAchievementModal } from "../../utils/achievement/should-show-achievement";
 import calculateGoalProgress from "../../utils/goal/calculate-goal-progress";
 import formatCurrency from "../../utils/text/format-currency";
@@ -34,6 +35,17 @@ const ActiveGoalCard = () => {
     }
   }, [progress, activeGoal, authUser, dispatch]);
 
+  function handleMarkAsCompleted() {
+    if (!authUser?.uid || !activeGoal) return;
+    dispatch(
+      updateGoalThunk({
+        userId: authUser.uid,
+        goal: { id: activeGoal.id, status: "completed" },
+        hasAlert: false,
+      }),
+    );
+  }
+
   return (
     <Card id="active-goal" title="Meta ativa" icon={CircleCheckBig}>
       {activeGoal ? (
@@ -53,9 +65,17 @@ const ActiveGoalCard = () => {
                 </span>
               </li>
               <li>
-                {progress >= 100
-                  ? "Meta concluída"
-                  : `${Math.round(progress)}% concluído`}
+                {progress >= 100 ? (
+                  <button
+                    type="button"
+                    className={activeGoalCardStyle.markAsCompletedButton}
+                    onClick={handleMarkAsCompleted}
+                  >
+                    Marcar como concluída
+                  </button>
+                ) : (
+                  `${Math.round(progress)}% concluído`
+                )}
               </li>
             </ul>
           </div>

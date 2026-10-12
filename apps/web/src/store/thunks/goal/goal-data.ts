@@ -1,6 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
 
 import { IGoal } from "../../../@types/goal";
+import { ITransaction } from "../../../@types/transaction";
 import createActivityService from "../../../services/activity/create-activity";
 import readCollectionService from "../../../services/collection/read-collection";
 import updateCollectionService from "../../../services/collection/update-collection";
@@ -10,11 +13,18 @@ import readAllGoalsService from "../../../services/goal/read-all-goals";
 import readGoalService from "../../../services/goal/read-goal";
 import updateGoalService from "../../../services/goal/update-goal";
 import { buildChanges } from "../../../utils/activity/build-changes";
+import formatCurrency from "../../../utils/text/format-currency";
 import { RootState } from "../../configure-store";
+import { updateAuthUser } from "../../reducers/user/user-auth";
 import {
   updateCollectionLocal,
   updateGoalLocal,
 } from "../../reducers/user/user-finances";
+import {
+  createTransactionThunk,
+  deleteTransactionThunk,
+} from "../transaction/transaction-data";
+import { updateUserThunk } from "../user/user-data";
 
 const TRACKED_GOAL_KEYS: (keyof IGoal)[] = ["value", "status", "collection"];
 
@@ -111,6 +121,85 @@ export const updateGoalThunk = createAsyncThunk<
         const status = "waiting";
         await updateGoalService({ ...activeGoal, status }, data.userId, false);
         dispatch(updateGoalLocal({ id: activeGoal.id, status }));
+      }
+
+      // completing a goal debits its value from the wallet and keeps a
+      // linked transaction; reverting away from "completed" credits it
+      // back and removes that transaction, so the two stay reversible
+      const isCompleting =
+        currentGoal?.status !== "completed" &&
+        data.goal.status === "completed";
+      const isReverting =
+        currentGoal?.status === "completed" &&
+        data.goal.status !== undefined &&
+        data.goal.status !== "completed";
+      const authUser = state.userAuth.authUser;
+
+      if (isCompleting && currentGoal && authUser?.uid) {
+        const goalValue = data.goal.value ?? currentGoal.value;
+        const now = new Date().toISOString();
+        const transaction: ITransaction = {
+          id: uuidv4(),
+          name: data.goal.name ?? currentGoal.name,
+          value: goalValue,
+          type: "debt",
+          date: now,
+          category: "savings",
+          description: null,
+          createdAt: now,
+          updatedAt: now,
+          recurrence: null,
+          occurrenceLog: null,
+          hasRecurrence: false,
+        };
+
+        await dispatch(
+          createTransactionThunk({ transaction, userId: data.userId }),
+        );
+
+        const newWallet = authUser.wallet - goalValue;
+        await dispatch(
+          updateUserThunk({
+            uid: authUser.uid,
+            wallet: newWallet,
+            hasAlert: false,
+          }),
+        );
+        dispatch(updateAuthUser({ wallet: newWallet }));
+
+        data.goal.completionTransactionId = transaction.id;
+        data.hasAlert = false;
+        toast.success(
+          `Meta concluída! ${formatCurrency(`${goalValue}`)} debitados da carteira.`,
+        );
+      } else if (
+        isReverting &&
+        currentGoal &&
+        authUser?.uid &&
+        currentGoal.completionTransactionId
+      ) {
+        await dispatch(
+          deleteTransactionThunk({
+            transactionId: currentGoal.completionTransactionId,
+            userId: data.userId,
+          }),
+        );
+
+        const newWallet = authUser.wallet + currentGoal.value;
+        await dispatch(
+          updateUserThunk({
+            uid: authUser.uid,
+            wallet: newWallet,
+            hasAlert: false,
+          }),
+        );
+        dispatch(updateAuthUser({ wallet: newWallet }));
+
+        data.goal.completionTransactionId = null;
+        data.hasAlert = false;
+        toast.success(
+          `Meta revertida. ${formatCurrency(`${currentGoal.value}`)} creditados de volta na carteira.`,
+        );
       }
 
       await updateGoalService(data.goal, data.userId, data.hasAlert ?? false);

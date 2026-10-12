@@ -18,6 +18,7 @@ export interface IGoal {
   description: string | null;
   createdAt: Date | string;
   updatedAt: Date | string;
+  completionTransactionId?: string | null;
 }
 
 type GoalOperation = "create" | "read" | "update" | "delete";
