@@ -81,6 +81,9 @@ const RegisterForm = () => {
           register={register("confirmPassword", { required: true })}
           error={errors.confirmPassword?.message}
         />
+        <p className={styles.demoNotice}>
+          Conta de demonstração: dados excluídos após 7 dias.
+        </p>
         <RegisterSubmitButton
           loading={loading}
           setLoading={setLoading}

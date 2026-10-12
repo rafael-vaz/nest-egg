@@ -6,6 +6,14 @@
   color: var(--ne-c2);
 }
 
+p.demoNotice {
+  font-family: var(--content-font);
+  font-size: 0.75rem;
+  color: var(--ne-c5);
+  text-align: center;
+  margin: 0;
+}
+
 .loginInvite {
   font-family: var(--content-font);
   font-size: 0.875rem;
