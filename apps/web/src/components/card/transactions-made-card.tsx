@@ -1,9 +1,11 @@
+import { DatesRangeValue } from "@mantine/dates";
 import { ChartCandlestick } from "lucide-react";
 import React from "react";
 import { useSelector } from "react-redux";
 
 import { RootState } from "../../store/configure-store";
 import getLastMonthsRanges from "../../utils/date/get-last-months-ranges";
+import getMonthRangesBetween from "../../utils/date/get-month-ranges-between";
 import getTransactionOccurrences from "../../utils/transaction/get-transaction-occurrences";
 import sumOccurrencesByType from "../../utils/transaction/sum-occurrences-by-type";
 import StackedAreaChart from "../charts/stacked-area-chart";
@@ -15,6 +17,9 @@ const TransactionsMadeCard = () => {
   const { transactions } = useSelector(
     (state: RootState) => state.userFinances,
   );
+  const [monthInterval, setMonthInterval] = React.useState<
+    DatesRangeValue<string>
+  >([null, null]);
 
   const keys = [
     { id: "credit", color: "#15f5ba" },
@@ -28,8 +33,14 @@ const TransactionsMadeCard = () => {
 
   const data = React.useMemo(() => {
     const occurrences = getTransactionOccurrences(transactions);
+    const [startDate, endDate] = monthInterval;
+    const ranges =
+      startDate || endDate
+        ? getMonthRangesBetween(startDate ?? endDate!, endDate ?? startDate!)
+        : getLastMonthsRanges(MONTHS_TO_SHOW);
+
     // values are stored as centavos; convert to reais for the chart
-    return getLastMonthsRanges(MONTHS_TO_SHOW).map((range) => ({
+    return ranges.map((range) => ({
       name: range.label,
       credit:
         sumOccurrencesByType(
@@ -46,7 +57,7 @@ const TransactionsMadeCard = () => {
           range.lastDay,
         ) / 100,
     }));
-  }, [transactions]);
+  }, [transactions, monthInterval]);
 
   return (
     <Card
@@ -54,6 +65,7 @@ const TransactionsMadeCard = () => {
       title="Transações realizadas"
       icon={ChartCandlestick}
       hasFilter={true}
+      onFilterChange={setMonthInterval}
     >
       <StackedAreaChart keys={keys} data={data} translations={translations} />
     </Card>
