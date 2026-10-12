@@ -24,21 +24,25 @@ const PieChartComponent = ({
   data,
   height = "small",
 }: IPieChartComponentProps) => {
+  // zero-value slices still reserve their paddingAngle gap, leaving a
+  // visible gap in the ring when only some categories have entries
+  const visibleData = data.filter((entry) => entry.value > 0);
+
   return (
     <ChartContainer type="pie" height={height}>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
-            data={data}
+            data={visibleData}
             cx={40}
             cy="50%"
             innerRadius="60%"
             outerRadius="80%"
-            paddingAngle={4}
+            paddingAngle={visibleData.length > 1 ? 4 : 0}
             dataKey="value"
             nameKey="name"
           >
-            {data.map((entry) => (
+            {visibleData.map((entry) => (
               <Cell
                 key={`cell-${entry.name}`}
                 fill={entry.color}

@@ -14,6 +14,7 @@ import { clearAndSetAnnouncementContent } from "../../store/reducers/announcemen
 import { openModalState } from "../../store/reducers/modal/modal";
 import goalStatusMap, { IGoalStatus } from "../../templates/goal-status-map";
 import debounce from "../../utils/debounce";
+import calculateGoalProgress from "../../utils/goal/calculate-goal-progress";
 import getGoalStatusValueById from "../../utils/goal/get-goal-status-value-by-id";
 import formatCurrency from "../../utils/text/format-currency";
 import Button from "../button/button";
@@ -44,6 +45,8 @@ const GoalsRecordsContent = () => {
   const { goals, loading } = useSelector(
     (state: RootState) => state.userFinances,
   );
+  const { authUser } = useSelector((state: RootState) => state.userAuth);
+  const walletValue = authUser?.wallet ?? 0;
   const [statusFilter, setStatusFilter] = React.useState(filters.status);
   const [monetaryInterval, setMonetaryInterval] = React.useState({
     start: filters.minValue ?? 0,
@@ -318,7 +321,9 @@ const GoalsRecordsContent = () => {
                       {getGoalStatusValueById(goal.status)}
                     </div>
                   </TableDataCell>
-                  <TableDataCell>20%</TableDataCell>
+                  <TableDataCell>
+                    {Math.round(calculateGoalProgress(walletValue, goal.value))}%
+                  </TableDataCell>
                   <TableDataCell>
                     {goal.collection ? (
                       <div className={styles.recordFlex}>
