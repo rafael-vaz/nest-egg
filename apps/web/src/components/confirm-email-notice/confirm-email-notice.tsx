@@ -1,5 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
+import { RootState } from "../../store/configure-store";
+import maskEmail from "../../utils/text/mask-email";
 import GradientContainer from "../gradient-container/gradient-container";
 import LoaderBox from "../loader/loader-box";
 import Title from "../title/title";
@@ -8,6 +11,7 @@ import ConfirmEmailNoticeButton from "./confirm-email-notice-button";
 import { ResendEmailNoticeButton } from "./resend-email-notice-button";
 
 const ConfirmEmailNotice = () => {
+  const { authUser } = useSelector((state: RootState) => state.userAuth);
   const [checkingEmail, setCheckingEmail] = React.useState(false);
   const [resendingEmail, setResendingEmail] = React.useState(false);
 
@@ -20,8 +24,8 @@ const ConfirmEmailNotice = () => {
         <Title text="Confirme o seu e-mail" align="center" />
         <p>
           <b>
-            Acabamos de enviar um e-mail de confirmação para você no endereço
-            fe*******@live.com.
+            Acabamos de enviar um e-mail de confirmação para você no endereço{" "}
+            {maskEmail(authUser?.email ?? "")}.
           </b>
         </p>
         <p className={styles.warning}>
