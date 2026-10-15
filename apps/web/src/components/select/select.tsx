@@ -1,8 +1,9 @@
-import { CheckCircle, ChevronDown, Lock, LucideProps } from "lucide-react";
+import { CheckCircle, ChevronDown, Lock, LucideProps, Search } from "lucide-react";
 import { motion } from "motion/react";
 import React from "react";
 
 import slideDownVariants from "../../motion/slide-down-variants";
+import filterOptionsBySearch from "../../utils/text/filter-options-by-search";
 import Label from "../label/label";
 import styles from "./select.module.css";
 
@@ -27,6 +28,7 @@ interface ISelectProps {
   hasNoMargin?: boolean;
   className?: string;
   infoBox?: string;
+  searchable?: boolean;
   onChange?: (value: string) => void;
 }
 
@@ -40,6 +42,7 @@ const Select = ({
   disabled = false,
   className,
   infoBox = "",
+  searchable = false,
   onChange,
 }: ISelectProps) => {
   const initialState = {
@@ -49,19 +52,29 @@ const Select = ({
   const selectContainerRef = React.useRef(null);
   const selectInputRef = React.useRef(null);
   const selectListRef = React.useRef(null);
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
   const [active, setActive] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState(initialState);
+  const [searchTerm, setSearchTerm] = React.useState("");
 
   function handleSelectClick() {
     setActive((state) => !state);
-    setTimeout(setSelectListFocus, 50);
+    setTimeout(searchable ? setSearchInputFocus : setSelectListFocus, 50);
   }
 
   function handleSelectKeyDown(event: React.KeyboardEvent<HTMLButtonElement>) {
     if (event.key === "Enter") {
       event.preventDefault();
       setActive((state) => !state);
-      setTimeout(setSelectListFocus, 50);
+      setTimeout(searchable ? setSearchInputFocus : setSelectListFocus, 50);
+    }
+  }
+
+  function handleSearchInputKeyDown(
+    event: React.KeyboardEvent<HTMLInputElement>,
+  ) {
+    if (event.key === "Enter") {
+      event.preventDefault();
     }
   }
 
@@ -91,6 +104,12 @@ const Select = ({
     if (selectListRef.current) {
       const selectListElement = selectListRef.current as HTMLElement;
       selectListElement.focus();
+    }
+  }
+
+  function setSearchInputFocus() {
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
     }
   }
 
@@ -156,7 +175,22 @@ const Select = ({
     };
   }, [active]);
 
-  const selectOptions = groups.map(({ name, icon: Icon, children }) => {
+  React.useEffect(() => {
+    if (!active) setSearchTerm("");
+  }, [active]);
+
+  const visibleGroups = searchable
+    ? groups.map((group) => ({
+        ...group,
+        children: filterOptionsBySearch(searchTerm, group.children),
+      }))
+    : groups;
+  const hasNoResults =
+    searchable &&
+    searchTerm.length > 0 &&
+    visibleGroups.every((group) => group.children.length === 0);
+
+  const selectOptions = visibleGroups.map(({ name, icon: Icon, children }) => {
     const options = children.map(({ id, value }) => {
       const isSelected = selectedOption.id === id;
       return (
@@ -247,8 +281,32 @@ const Select = ({
             tabIndex={0}
             ref={selectListRef}
           >
-            <ul className={`${styles.selectOptionsList} smoothScrollbar`}>
-              {...selectOptions}
+            {searchable && (
+              <div className={styles.selectSearchContainer}>
+                <Search size={16} />
+                <input
+                  type="text"
+                  className={styles.selectSearchInput}
+                  placeholder="Buscar..."
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  onKeyDown={handleSearchInputKeyDown}
+                  ref={searchInputRef}
+                />
+              </div>
+            )}
+            <ul
+              className={`${styles.selectOptionsList} ${
+                searchable && styles.selectOptionsListCompact
+              } smoothScrollbar`}
+            >
+              {hasNoResults ? (
+                <li className={styles.selectNoResults}>
+                  Nenhuma opção encontrada
+                </li>
+              ) : (
+                selectOptions
+              )}
             </ul>
           </motion.div>
         )}

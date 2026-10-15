@@ -162,6 +162,7 @@ const TransactionForm = ({
             groups={[{ children: transactionCategoryMap }]}
             value={field.value}
             onChange={field.onChange}
+            searchable
           />
         )}
       />
