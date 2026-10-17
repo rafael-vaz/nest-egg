@@ -119,4 +119,43 @@ describe("buildDemoDataset", () => {
 
     expect(first).toEqual(second);
   });
+
+  it("exactly one goal has status active", () => {
+    const {goals} = buildDemoDataset(NOW);
+
+    expect(goals.filter((g) => g.status === "active")).toHaveLength(1);
+  });
+
+  it("every recurring transaction's date is strictly in the future", () => {
+    const {transactions} = buildDemoDataset(NOW);
+
+    for (const t of transactions.filter((t) => t.hasRecurrence)) {
+      expect(new Date(t.date).getTime()).toBeGreaterThan(NOW.getTime());
+    }
+  });
+
+  it("every recurring transaction has a current-month occurrence", () => {
+    const {transactions} = buildDemoDataset(NOW);
+
+    for (const t of transactions.filter((t) => t.hasRecurrence)) {
+      const hasCurrentMonthOccurrence = (t.occurrenceLog ?? []).some(
+        (occ) => {
+          const d = new Date(occ.date);
+          return (
+            d.getUTCFullYear() === NOW.getUTCFullYear() &&
+            d.getUTCMonth() === NOW.getUTCMonth()
+          );
+        },
+      );
+      expect(hasCurrentMonthOccurrence).toBe(true);
+    }
+  });
+
+  it("every occurrence date is a full ISO timestamp, never a bare date", () => {
+    const {transactions} = buildDemoDataset(NOW);
+
+    for (const occ of transactions.flatMap((t) => t.occurrenceLog ?? [])) {
+      expect(new Date(occ.date).toISOString()).toBe(occ.date);
+    }
+  });
 });

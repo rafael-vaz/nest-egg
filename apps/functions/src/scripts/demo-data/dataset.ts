@@ -3,42 +3,46 @@ import {
   DemoDataset,
   DemoGoal,
   DemoTransaction,
+  DemoTransactionType,
 } from "./types";
 
 const WALLET_BASELINE_CENTAVOS = 425000;
 
 /**
- * Formats a date as a YYYY-MM-DD string, matching the date-only format
- * used elsewhere in this dataset.
- * @param {Date} date - The date to format
- * @return {string} The formatted date
- */
-function toDateOnly(date: Date): string {
-  return date.toISOString().slice(0, 10);
-}
-
-/**
- * Computes a date a number of days before `now`, formatted date-only.
+ * Computes a full ISO timestamp a number of days before `now`, pinned to
+ * noon UTC to avoid day-boundary edge cases.
  * @param {Date} now - The anchor date
  * @param {number} days - How many days before `now`
- * @return {string} The formatted date
+ * @return {string} The full ISO timestamp
  */
-function daysAgo(now: Date, days: number): string {
-  const result = new Date(now);
-  result.setDate(result.getDate() - days);
-  return toDateOnly(result);
+function daysAgoIso(now: Date, days: number): string {
+  const result = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate() - days,
+    12, 0, 0, 0,
+  ));
+  return result.toISOString();
 }
 
 /**
- * Computes a date a number of months before `now`, formatted date-only.
+ * Computes a full ISO timestamp offset by whole months from `now`, pinned
+ * to noon UTC to avoid day-boundary edge cases. A negative `monthsOffset`
+ * moves into the future — used for a recurring transaction's `date`
+ * pointer, which production always leaves pointing at the next
+ * not-yet-materialized occurrence (see cron.ts's processTransactionRecurrence).
  * @param {Date} now - The anchor date
- * @param {number} months - How many months before `now`
- * @return {string} The formatted date
+ * @param {number} monthsOffset - Months before `now`; negative is after
+ * @return {string} The full ISO timestamp
  */
-function monthsAgo(now: Date, months: number): string {
-  const result = new Date(now);
-  result.setMonth(result.getMonth() - months);
-  return toDateOnly(result);
+function monthsOffsetIso(now: Date, monthsOffset: number): string {
+  const result = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth() - monthsOffset,
+    now.getUTCDate(),
+    12, 0, 0, 0,
+  ));
+  return result.toISOString();
 }
 
 /**
@@ -48,6 +52,60 @@ function monthsAgo(now: Date, months: number): string {
  */
 function nowIso(now: Date): string {
   return now.toISOString();
+}
+
+interface IBuildRecurringTransactionParams {
+  id: string;
+  name: string;
+  value: number;
+  type: DemoTransactionType;
+  category: string;
+  now: Date;
+  createdAt: string;
+}
+
+/**
+ * Builds a monthly recurring transaction with 3 past/current occurrences
+ * (2 months ago, 1 month ago, and the current month) already logged, and
+ * its `date` pointer set one month into the future — the same steady
+ * state production's own recurrence processing always leaves a
+ * transaction in between runs. This is deliberate: if `date` were in the
+ * past (or the occurrence dates didn't match production's own format),
+ * the nightly processRecurrences cron would treat every occurrence as
+ * unlogged and re-append it, corrupting the seeded wallet balance.
+ * @param {IBuildRecurringTransactionParams} params - Transaction fields
+ * @return {DemoTransaction} The built recurring transaction
+ */
+function buildRecurringTransaction(
+  params: IBuildRecurringTransactionParams,
+): DemoTransaction {
+  const {id, name, value, type, category, now, createdAt} = params;
+
+  const occurrenceLog = [2, 1, 0].map((monthsAgo, index) => ({
+    id: `${id}-occ-${index + 1}`,
+    date: monthsOffsetIso(now, monthsAgo),
+    value,
+    type,
+  }));
+
+  return {
+    id,
+    name,
+    value,
+    type,
+    date: monthsOffsetIso(now, -1),
+    category,
+    description: null,
+    createdAt,
+    updatedAt: createdAt,
+    hasRecurrence: true,
+    recurrence: {
+      startDate: monthsOffsetIso(now, 2),
+      endDate: null,
+      frequency: {rate: 1, category: "month", weekDays: null, order: null},
+    },
+    occurrenceLog,
+  };
 }
 
 /**
@@ -96,6 +154,12 @@ export function buildDemoDataset(now: Date): DemoDataset {
       id: "demo-goal-viagem-praia",
       name: "Viagem para a praia",
       value: 600000,
+      // Exactly one goal may be "active" at a time — the app demotes any
+      // other active goal to "waiting" the moment one becomes active
+      // (see apps/functions/src/store/thunks/goal/goal-data.ts), and the
+      // active-goal card picks whichever Firestore happens to return
+      // first when more than one claims the status. This is the goal
+      // the video script's "active goal" scene shows.
       status: "active",
       collection: {id: "demo-collection-viagens"},
       description: null,
@@ -106,7 +170,7 @@ export function buildDemoDataset(now: Date): DemoDataset {
       id: "demo-goal-reforma-casa",
       name: "Reforma da casa",
       value: 1200000,
-      status: "active",
+      status: "waiting",
       collection: {id: "demo-collection-casa-nova"},
       description: null,
       createdAt,
@@ -125,99 +189,18 @@ export function buildDemoDataset(now: Date): DemoDataset {
   ];
 
   const recurringTransactions: DemoTransaction[] = [
-    {
-      id: "demo-tx-salario",
-      name: "Salário",
-      value: 500000,
-      type: "credit",
-      date: monthsAgo(now, 2),
-      category: "income",
-      description: null,
-      createdAt,
-      updatedAt: createdAt,
-      hasRecurrence: true,
-      recurrence: {
-        startDate: monthsAgo(now, 2),
-        endDate: null,
-        frequency: {rate: 1, category: "month", weekDays: null, order: null},
-      },
-      occurrenceLog: [
-        {
-          id: "demo-tx-salario-occ-1",
-          date: monthsAgo(now, 2),
-          value: 500000,
-          type: "credit",
-        },
-        {
-          id: "demo-tx-salario-occ-2",
-          date: monthsAgo(now, 1),
-          value: 500000,
-          type: "credit",
-        },
-      ],
-    },
-    {
-      id: "demo-tx-aluguel",
-      name: "Aluguel",
-      value: 180000,
-      type: "debt",
-      date: monthsAgo(now, 2),
-      category: "housing",
-      description: null,
-      createdAt,
-      updatedAt: createdAt,
-      hasRecurrence: true,
-      recurrence: {
-        startDate: monthsAgo(now, 2),
-        endDate: null,
-        frequency: {rate: 1, category: "month", weekDays: null, order: null},
-      },
-      occurrenceLog: [
-        {
-          id: "demo-tx-aluguel-occ-1",
-          date: monthsAgo(now, 2),
-          value: 180000,
-          type: "debt",
-        },
-        {
-          id: "demo-tx-aluguel-occ-2",
-          date: monthsAgo(now, 1),
-          value: 180000,
-          type: "debt",
-        },
-      ],
-    },
-    {
-      id: "demo-tx-streaming",
-      name: "Assinatura streaming",
-      value: 3990,
-      type: "debt",
-      date: monthsAgo(now, 2),
-      category: "subscriptions",
-      description: null,
-      createdAt,
-      updatedAt: createdAt,
-      hasRecurrence: true,
-      recurrence: {
-        startDate: monthsAgo(now, 2),
-        endDate: null,
-        frequency: {rate: 1, category: "month", weekDays: null, order: null},
-      },
-      occurrenceLog: [
-        {
-          id: "demo-tx-streaming-occ-1",
-          date: monthsAgo(now, 2),
-          value: 3990,
-          type: "debt",
-        },
-        {
-          id: "demo-tx-streaming-occ-2",
-          date: monthsAgo(now, 1),
-          value: 3990,
-          type: "debt",
-        },
-      ],
-    },
+    buildRecurringTransaction({
+      id: "demo-tx-salario", name: "Salário", value: 500000,
+      type: "credit", category: "income", now, createdAt,
+    }),
+    buildRecurringTransaction({
+      id: "demo-tx-aluguel", name: "Aluguel", value: 180000,
+      type: "debt", category: "housing", now, createdAt,
+    }),
+    buildRecurringTransaction({
+      id: "demo-tx-streaming", name: "Assinatura streaming", value: 3990,
+      type: "debt", category: "subscriptions", now, createdAt,
+    }),
   ];
 
   const oneOffDefs: {
@@ -229,48 +212,48 @@ export function buildDemoDataset(now: Date): DemoDataset {
   }[] = [
     {
       id: "demo-tx-mercado-1", name: "Supermercado",
-      value: 32000, category: "food", daysAgo: 3,
+      value: 45000, category: "food", daysAgo: 3,
     },
     {
       id: "demo-tx-uber", name: "Corrida de aplicativo",
-      value: 4800, category: "transport", daysAgo: 7,
+      value: 12000, category: "transport", daysAgo: 7,
     },
     {
       id: "demo-tx-cinema", name: "Cinema",
-      value: 6500, category: "leisure", daysAgo: 11,
+      value: 18000, category: "leisure", daysAgo: 11,
     },
     {
       id: "demo-tx-roupas", name: "Roupas novas",
-      value: 28000, category: "shopping", daysAgo: 14,
+      value: 65000, category: "shopping", daysAgo: 14,
     },
     {
       id: "demo-tx-restaurante", name: "Restaurante",
-      value: 15000, category: "food", daysAgo: 18,
+      value: 32000, category: "food", daysAgo: 18,
     },
     {
       id: "demo-tx-combustivel", name: "Combustível",
-      value: 22000, category: "transport", daysAgo: 23,
+      value: 48000, category: "transport", daysAgo: 23,
     },
     {
       id: "demo-tx-presente", name: "Presente de aniversário",
-      value: 15000, category: "gifts", daysAgo: 27,
+      value: 35000, category: "gifts", daysAgo: 27,
     },
     {
       id: "demo-tx-mercado-2", name: "Supermercado",
-      value: 21000, category: "food", daysAgo: 33,
+      value: 51000, category: "food", daysAgo: 33,
     },
     {
       id: "demo-tx-farmacia", name: "Farmácia",
-      value: 9800, category: "health", daysAgo: 38,
+      value: 22000, category: "health", daysAgo: 38,
     },
     {
-      id: "demo-tx-fone", name: "Fone de ouvido",
-      value: 52920, category: "technology", daysAgo: 45,
+      id: "demo-tx-celular", name: "Celular seminovo",
+      value: 195030, category: "technology", daysAgo: 45,
     },
   ];
 
   const oneOffTransactions: DemoTransaction[] = oneOffDefs.map((def) => {
-    const date = daysAgo(now, def.daysAgo);
+    const date = daysAgoIso(now, def.daysAgo);
     return {
       id: def.id,
       name: def.name,
