@@ -12,8 +12,8 @@
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
-    "reset:demo": "ts-node src/scripts/demo-data/reset-demo-user.ts",
-    "seed:demo": "ts-node src/scripts/demo-data/seed-demo-user.ts"
+    "reset:demo": "npx ts-node src/scripts/demo-data/reset-demo-user.ts",
+    "seed:demo": "npx ts-node src/scripts/demo-data/seed-demo-user.ts"
   },
   "engines": {
     "node": "24"

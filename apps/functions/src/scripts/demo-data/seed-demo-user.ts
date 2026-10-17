@@ -11,9 +11,13 @@
  * — see assertDemoUserEmail.
  *
  * Expected to run immediately after reset-demo-user.ts, against an
- * account with empty demo subcollections. Logs the final wallet value so
- * the operator can compare it against the documented baseline (425000
- * centavos) before opening the app.
+ * account with empty demo subcollections — run them back to back in the
+ * same session; a long gap between the two risks a late
+ * onTransactionDeleted delivery from the reset reconciling against
+ * ledger entries the seed has since recreated. Throws (via
+ * assertWalletMatches) if the final wallet doesn't exactly match the
+ * dataset's documented baseline, instead of leaving that check to a
+ * human reading stdout.
  *
  * NOT exported from `src/index.ts` and NOT deployed as a Cloud Function.
  * Run manually, once per seed, against the real project:
@@ -24,10 +28,11 @@
  * the target Firebase project (or any other way of providing
  * firebase-admin with default credentials for that project).
  */
-import {initializeApp} from "firebase-admin/app";
+import {getApp, initializeApp} from "firebase-admin/app";
 import {getAuth} from "firebase-admin/auth";
 import {getFirestore} from "firebase-admin/firestore";
 import {assertDemoUserEmail} from "./assert-demo-user-email";
+import {assertWalletMatches} from "./assert-wallet-matches";
 import {buildDemoDataset} from "./dataset";
 import {reconcileWallet} from "../../wallet/reconcile-wallet";
 
@@ -41,10 +46,13 @@ const FIREBASE_PROJECT_ID = "nest-egg-ef466";
  */
 async function seedDemoUser(): Promise<void> {
   initializeApp({projectId: FIREBASE_PROJECT_ID});
+  const projectId = getApp().options.projectId;
+  console.log(`Running against Firebase project: ${projectId}`);
   const db = getFirestore();
 
   const user = await getAuth().getUserByEmail(DEMO_USER_EMAIL);
   assertDemoUserEmail(user.email ?? "", DEMO_USER_EMAIL);
+  console.log(`Resolved uid: ${user.uid}`);
 
   const dataset = buildDemoDataset(new Date());
 
@@ -75,7 +83,9 @@ async function seedDemoUser(): Promise<void> {
   console.log("Wallet reconciled for every seeded transaction");
 
   const userSnap = await db.doc(`nest-egg-users/${user.uid}`).get();
-  console.log(`Final wallet value: ${userSnap.data()?.wallet}`);
+  const finalWallet = userSnap.data()?.wallet as number | undefined;
+  console.log(`Final wallet value: ${finalWallet}`);
+  assertWalletMatches(finalWallet, dataset.walletBaselineCentavos);
 
   console.log("Demo user seed complete");
 }

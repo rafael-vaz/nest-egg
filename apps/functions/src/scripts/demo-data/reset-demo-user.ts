@@ -13,7 +13,10 @@
  * Idempotent — each subcollection is deleted by querying its live
  * contents (not a fixed id list), so running this against an
  * already-empty account is a safe no-op. Meant to be run immediately
- * before seed-demo-user.ts, as many times as a recording retake needs.
+ * before seed-demo-user.ts, as many times as a recording retake needs —
+ * run them back to back in the same session; a long gap between the two
+ * risks a late onTransactionDeleted delivery from this reset reconciling
+ * against ledger entries the seed has since recreated.
  *
  * NOT exported from `src/index.ts` and NOT deployed as a Cloud Function.
  * Run manually, once per reset, against the real project:
@@ -24,7 +27,7 @@
  * the target Firebase project (or any other way of providing
  * firebase-admin with default credentials for that project).
  */
-import {initializeApp} from "firebase-admin/app";
+import {getApp, initializeApp} from "firebase-admin/app";
 import {getAuth} from "firebase-admin/auth";
 import {getFirestore} from "firebase-admin/firestore";
 import {assertDemoUserEmail} from "./assert-demo-user-email";
@@ -65,10 +68,13 @@ async function resetSubcollection(
  */
 async function resetDemoUser(): Promise<void> {
   initializeApp({projectId: FIREBASE_PROJECT_ID});
+  const projectId = getApp().options.projectId;
+  console.log(`Running against Firebase project: ${projectId}`);
   const db = getFirestore();
 
   const user = await getAuth().getUserByEmail(DEMO_USER_EMAIL);
   assertDemoUserEmail(user.email ?? "", DEMO_USER_EMAIL);
+  console.log(`Resolved uid: ${user.uid}`);
 
   for (const subcollection of DEMO_SUBCOLLECTIONS) {
     const count = await resetSubcollection(db, user.uid, subcollection);
