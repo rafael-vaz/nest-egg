@@ -334,21 +334,24 @@ this is a starting draft, not a final copy decision):
 >
 > #desenvolvimentoweb #react #firebase #fintech #sideproject
 
-## Open questions for you before execution
+## Open questions — all resolved
 
 1. ~~Confirm the exact demo dataset~~ — approved, §1's example is the
    final basis for the seed script.
 2. ~~Square vs. widescreen~~ — decided: 16:9 widescreen only (square
    would crop the sidebar/wide content in nearly every scene).
-3. OK to add a new `apps/promo-video` workspace package (Remotion +
-   its deps), isolated from the running app?
-4. Any constraint on which music-source account/budget is available
-   (free-only, or is a paid Epidemic Sound/Artlist subscription on the
-   table)?
+3. ~~Workspace location~~ — `apps/promo-video`, inside this monorepo.
+4. ~~Music budget~~ — free-only: Pixabay Music / YouTube Audio Library
+   (no attribution required).
 
-Nothing in this plan has been executed — no data was changed, no
-package was installed, no recording was made. Once you approve (and
-confirm question 1 especially, since it writes real data), the next
-step is the `reset-demo-user.ts` / `seed-demo-user.ts` scripts, built
-with TDD like the rest of this session's work, then the recording
-scripts, then the Remotion project.
+## Status: plan approved
+
+Nothing has been executed yet — no data was changed, no package was
+installed, no recording was made. Execution order:
+
+1. `reset-demo-user.ts` / `seed-demo-user.ts` (TDD, per this session's
+   usual workflow) — writes real data to `ferreira.vaz@live.com`.
+2. Per-scene `agent-browser` recording scripts.
+3. The `apps/promo-video` Remotion project (scenes, captions, music,
+   transitions).
+4. Render both the preview and final export; review before publishing.
