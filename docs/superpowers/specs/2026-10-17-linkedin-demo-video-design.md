@@ -296,22 +296,18 @@ apps/promo-video/
   scene reuses it instead of restyling text per scene.
 - Audio: a single `<Audio>` at the `PromoVideo.tsx` root level with the
   interpolated fade from §5, not per-scene.
-- Two `Composition`s registered in `Root.tsx`: `PromoVideoSquare`
-  (1080×1080) and `PromoVideoWide` (1920×1080) — same scene components,
-  different crop/`objectFit` per the format, so both exports come from
-  one edit (see §8 for which is primary).
+One `Composition` registered in `Root.tsx`: `PromoVideoWide`
+  (1920×1080) — see §8 for why square was dropped.
 
 ## 8. Export and LinkedIn publishing
 
-- **Primary format: 1:1 square, 1080×1080, 30fps.** LinkedIn's feed is
-  majority-mobile and a square crop occupies more of the viewport than
-  16:9 on a phone, which is why it's the commonly recommended format
-  for feed-native feature videos. It also forces the tighter
-  zoom/crop-in treatment already planned for scenes 2–6, which reads
-  as more dynamic.
-- **Secondary format: 16:9, 1920×1080, 30fps** — rendered from the
-  same edit for anywhere a widescreen version reads better (company
-  page banner, a reply to a comment, re-use on YouTube/the README).
+- **Format: 16:9 widescreen, 1920×1080, 30fps.** A 1:1 square crop of
+  this UI (sidebar + wide content/tables) loses real horizontal
+  context in nearly every scene — not a cosmetic trim, actual sidebar
+  or content cut off — unless every scene is cropped tight on a single
+  element, which rules out ever showing the dashboard as a whole.
+  Decided against square for that reason; widescreen shows the full
+  interface while still using the planned per-scene zooms/close-ups.
 - **Codec/encoding:** h264, `yuv420p` pixel format (broad player
   compatibility, confirmed current Remotion default path),
   `Config.setCrf(18)` (high quality, comfortably under LinkedIn's
@@ -340,11 +336,10 @@ this is a starting draft, not a final copy decision):
 
 ## Open questions for you before execution
 
-1. Confirm the exact demo dataset (§1's example is illustrative) —
-   want to adjust any category, value, or goal name before it's
-   hardcoded into the seed script?
-2. Square (1080×1080) as primary, with 16:9 as a secondary export —
-   agreed, or do you want 16:9 as primary instead?
+1. ~~Confirm the exact demo dataset~~ — approved, §1's example is the
+   final basis for the seed script.
+2. ~~Square vs. widescreen~~ — decided: 16:9 widescreen only (square
+   would crop the sidebar/wide content in nearly every scene).
 3. OK to add a new `apps/promo-video` workspace package (Remotion +
    its deps), isolated from the running app?
 4. Any constraint on which music-source account/budget is available
