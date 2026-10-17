@@ -3,6 +3,18 @@ import {buildDemoDataset} from "./dataset";
 
 const NOW = new Date("2026-10-17T12:00:00.000Z");
 
+/**
+ * Finds the first item matching the predicate, or throws if none match.
+ * @param {Array} items - Items to search
+ * @param {Function} predicate - Match condition
+ * @return {*} The first matching item
+ */
+function findOrThrow<T>(items: T[], predicate: (item: T) => boolean): T {
+  const found = items.find(predicate);
+  if (!found) throw new Error("Expected item not found in test fixture");
+  return found;
+}
+
 describe("buildDemoDataset", () => {
   it("returns exactly the Viagens and Casa nova collections", () => {
     const {collections} = buildDemoDataset(NOW);
@@ -24,8 +36,11 @@ describe("buildDemoDataset", () => {
   it("the Viagens goal lands between 65% and 75% progress", () => {
     const {goals, collections, walletBaselineCentavos} =
       buildDemoDataset(NOW);
-    const viagens = collections.find((c) => c.name === "Viagens")!;
-    const goal = goals.find((g) => g.collection?.id === viagens.id)!;
+    const viagens = findOrThrow(collections, (c) => c.name === "Viagens");
+    const goal = findOrThrow(
+      goals,
+      (g) => g.collection?.id === viagens.id,
+    );
 
     const progress = (walletBaselineCentavos / goal.value) * 100;
 
@@ -36,8 +51,11 @@ describe("buildDemoDataset", () => {
   it("the Casa nova goal lands between 30% and 40% progress", () => {
     const {goals, collections, walletBaselineCentavos} =
       buildDemoDataset(NOW);
-    const casaNova = collections.find((c) => c.name === "Casa nova")!;
-    const goal = goals.find((g) => g.collection?.id === casaNova.id)!;
+    const casaNova = findOrThrow(collections, (c) => c.name === "Casa nova");
+    const goal = findOrThrow(
+      goals,
+      (g) => g.collection?.id === casaNova.id,
+    );
 
     const progress = (walletBaselineCentavos / goal.value) * 100;
 
@@ -50,7 +68,8 @@ describe("buildDemoDataset", () => {
 
     for (const goal of goals) {
       if (!goal.collection) continue;
-      const collection = collections.find((c) => c.id === goal.collection!.id);
+      const collectionId = goal.collection.id;
+      const collection = collections.find((c) => c.id === collectionId);
       expect(collection?.goals ?? []).toContainEqual({id: goal.id});
     }
 
@@ -70,7 +89,7 @@ describe("buildDemoDataset", () => {
     ).toBeGreaterThanOrEqual(3);
   });
 
-  it("the signed occurrenceLog total across all transactions equals the wallet baseline", () => {
+  it("the signed occurrenceLog total matches the wallet baseline", () => {
     const {transactions, walletBaselineCentavos} = buildDemoDataset(NOW);
 
     const total = transactions
@@ -83,7 +102,7 @@ describe("buildDemoDataset", () => {
     expect(total).toBe(walletBaselineCentavos);
   });
 
-  it("every document id is unique across collections, goals, and transactions", () => {
+  it("every document id is unique across the whole dataset", () => {
     const {collections, goals, transactions} = buildDemoDataset(NOW);
     const ids = [
       ...collections.map((c) => c.id),

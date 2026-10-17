@@ -20,7 +20,7 @@ describe("assertDemoUserEmail", () => {
     ).not.toThrow();
   });
 
-  it("includes both the resolved and expected email in the thrown message", () => {
+  it("includes both emails in the thrown message", () => {
     expect(() =>
       assertDemoUserEmail("wrong@live.com", "ferreira.vaz@live.com"),
     ).toThrow(/wrong@live\.com.*ferreira\.vaz@live\.com/);

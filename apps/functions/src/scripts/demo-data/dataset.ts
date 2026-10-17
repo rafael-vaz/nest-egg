@@ -7,22 +7,45 @@ import {
 
 const WALLET_BASELINE_CENTAVOS = 425000;
 
+/**
+ * Formats a date as a YYYY-MM-DD string, matching the date-only format
+ * used elsewhere in this dataset.
+ * @param {Date} date - The date to format
+ * @return {string} The formatted date
+ */
 function toDateOnly(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
 
+/**
+ * Computes a date a number of days before `now`, formatted date-only.
+ * @param {Date} now - The anchor date
+ * @param {number} days - How many days before `now`
+ * @return {string} The formatted date
+ */
 function daysAgo(now: Date, days: number): string {
   const result = new Date(now);
   result.setDate(result.getDate() - days);
   return toDateOnly(result);
 }
 
+/**
+ * Computes a date a number of months before `now`, formatted date-only.
+ * @param {Date} now - The anchor date
+ * @param {number} months - How many months before `now`
+ * @return {string} The formatted date
+ */
 function monthsAgo(now: Date, months: number): string {
   const result = new Date(now);
   result.setMonth(result.getMonth() - months);
   return toDateOnly(result);
 }
 
+/**
+ * Formats `now` as a full ISO timestamp, for createdAt/updatedAt fields.
+ * @param {Date} now - The anchor date
+ * @return {string} The formatted timestamp
+ */
 function nowIso(now: Date): string {
   return now.toISOString();
 }
@@ -204,16 +227,46 @@ export function buildDemoDataset(now: Date): DemoDataset {
     category: string;
     daysAgo: number;
   }[] = [
-    {id: "demo-tx-mercado-1", name: "Supermercado", value: 32000, category: "food", daysAgo: 3},
-    {id: "demo-tx-uber", name: "Corrida de aplicativo", value: 4800, category: "transport", daysAgo: 7},
-    {id: "demo-tx-cinema", name: "Cinema", value: 6500, category: "leisure", daysAgo: 11},
-    {id: "demo-tx-roupas", name: "Roupas novas", value: 28000, category: "shopping", daysAgo: 14},
-    {id: "demo-tx-restaurante", name: "Restaurante", value: 15000, category: "food", daysAgo: 18},
-    {id: "demo-tx-combustivel", name: "Combustível", value: 22000, category: "transport", daysAgo: 23},
-    {id: "demo-tx-presente", name: "Presente de aniversário", value: 15000, category: "gifts", daysAgo: 27},
-    {id: "demo-tx-mercado-2", name: "Supermercado", value: 21000, category: "food", daysAgo: 33},
-    {id: "demo-tx-farmacia", name: "Farmácia", value: 9800, category: "health", daysAgo: 38},
-    {id: "demo-tx-fone", name: "Fone de ouvido", value: 52920, category: "technology", daysAgo: 45},
+    {
+      id: "demo-tx-mercado-1", name: "Supermercado",
+      value: 32000, category: "food", daysAgo: 3,
+    },
+    {
+      id: "demo-tx-uber", name: "Corrida de aplicativo",
+      value: 4800, category: "transport", daysAgo: 7,
+    },
+    {
+      id: "demo-tx-cinema", name: "Cinema",
+      value: 6500, category: "leisure", daysAgo: 11,
+    },
+    {
+      id: "demo-tx-roupas", name: "Roupas novas",
+      value: 28000, category: "shopping", daysAgo: 14,
+    },
+    {
+      id: "demo-tx-restaurante", name: "Restaurante",
+      value: 15000, category: "food", daysAgo: 18,
+    },
+    {
+      id: "demo-tx-combustivel", name: "Combustível",
+      value: 22000, category: "transport", daysAgo: 23,
+    },
+    {
+      id: "demo-tx-presente", name: "Presente de aniversário",
+      value: 15000, category: "gifts", daysAgo: 27,
+    },
+    {
+      id: "demo-tx-mercado-2", name: "Supermercado",
+      value: 21000, category: "food", daysAgo: 33,
+    },
+    {
+      id: "demo-tx-farmacia", name: "Farmácia",
+      value: 9800, category: "health", daysAgo: 38,
+    },
+    {
+      id: "demo-tx-fone", name: "Fone de ouvido",
+      value: 52920, category: "technology", daysAgo: 45,
+    },
   ];
 
   const oneOffTransactions: DemoTransaction[] = oneOffDefs.map((def) => {
