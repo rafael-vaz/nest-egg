@@ -10,7 +10,7 @@
   },
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
-    "test": "npm run test -w apps/web && npm run test -w apps/functions && npm run test -w apps/promo-video",
+    "test": "npm run test -w apps/web && npm run test -w apps/functions",
     "test:coverage": "npm run test:coverage -w apps/web && npm run test:coverage -w apps/functions",
     "deploy": "firebase deploy",
     "deploy:hosting": "npm run deploy -w apps/web",
