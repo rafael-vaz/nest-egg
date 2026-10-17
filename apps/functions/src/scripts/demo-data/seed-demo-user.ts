@@ -32,6 +32,7 @@ import {buildDemoDataset} from "./dataset";
 import {reconcileWallet} from "../../wallet/reconcile-wallet";
 
 const DEMO_USER_EMAIL = "ferreira.vaz@live.com";
+const FIREBASE_PROJECT_ID = "nest-egg-ef466";
 
 /**
  * Seeds the promo-video demo account with the fixed demo dataset.
@@ -39,7 +40,7 @@ const DEMO_USER_EMAIL = "ferreira.vaz@live.com";
  *   wallet is reconciled
  */
 async function seedDemoUser(): Promise<void> {
-  initializeApp();
+  initializeApp({projectId: FIREBASE_PROJECT_ID});
   const db = getFirestore();
 
   const user = await getAuth().getUserByEmail(DEMO_USER_EMAIL);

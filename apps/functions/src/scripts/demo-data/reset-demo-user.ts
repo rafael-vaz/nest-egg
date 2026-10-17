@@ -30,6 +30,7 @@ import {getFirestore} from "firebase-admin/firestore";
 import {assertDemoUserEmail} from "./assert-demo-user-email";
 
 const DEMO_USER_EMAIL = "ferreira.vaz@live.com";
+const FIREBASE_PROJECT_ID = "nest-egg-ef466";
 const DEMO_SUBCOLLECTIONS = [
   "transactions",
   "goals",
@@ -63,7 +64,7 @@ async function resetSubcollection(
  *   and the wallet is reset
  */
 async function resetDemoUser(): Promise<void> {
-  initializeApp();
+  initializeApp({projectId: FIREBASE_PROJECT_ID});
   const db = getFirestore();
 
   const user = await getAuth().getUserByEmail(DEMO_USER_EMAIL);
