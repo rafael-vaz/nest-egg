@@ -10,7 +10,7 @@ export function getCaptionStyle(
       fontFamily: FONTS.title,
       color: COLORS.textPrimary,
       fontSize: 48,
-      fontWeight: 700,
+      fontWeight: 500,
     };
   }
 

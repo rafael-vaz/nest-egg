@@ -43,7 +43,7 @@ export const Scene04Reconciliation: React.FC = () => {
           style={{
             fontFamily: FONTS.title,
             fontSize: 72,
-            fontWeight: 700,
+            fontWeight: 500,
             color: COLORS.textPrimary,
             textShadow: "0 4px 24px rgba(0,0,0,0.6)",
           }}

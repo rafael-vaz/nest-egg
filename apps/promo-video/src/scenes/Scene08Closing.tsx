@@ -1,6 +1,7 @@
 import {AbsoluteFill} from "remotion";
 import {BrandLogo} from "../components/BrandLogo";
-import {CLOSING_URL, COLORS, FONTS, SCENES} from "../constants";
+import {getCaptionStyle} from "../components/Caption";
+import {CLOSING_URL, COLORS, SCENES} from "../constants";
 
 const DURATION = SCENES.find((s) => s.id === "closing")!.durationInFrames;
 const CAPTION = SCENES.find((s) => s.id === "closing")!.caption;
@@ -18,12 +19,13 @@ export const Scene08Closing: React.FC = () => {
           paddingBottom: "10%",
         }}
       >
+        {/* Two-line layout (headline + URL) doesn't fit Caption's
+            single-line fixed box, so this reuses the tested
+            getCaptionStyle function directly instead of hardcoding
+            font/weight/color a second time. */}
         <div
           style={{
-            fontFamily: FONTS.title,
-            fontSize: 48,
-            fontWeight: 700,
-            color: COLORS.textPrimary,
+            ...getCaptionStyle("headline"),
             textAlign: "center",
             maxWidth: "70%",
             marginBottom: 16,
@@ -31,14 +33,7 @@ export const Scene08Closing: React.FC = () => {
         >
           {CAPTION}
         </div>
-        <div
-          style={{
-            fontFamily: FONTS.content,
-            fontSize: 28,
-            color: COLORS.textSecondary,
-            textAlign: "center",
-          }}
-        >
+        <div style={{...getCaptionStyle("support"), textAlign: "center"}}>
           {CLOSING_URL}
         </div>
       </AbsoluteFill>
