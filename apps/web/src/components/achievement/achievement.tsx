@@ -1,9 +1,5 @@
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { RootState, useAppDispatch } from "../../store/configure-store";
-import { updateAuthUser } from "../../store/reducers/user/user-auth";
-import { updateUserThunk } from "../../store/thunks/user/user-data";
 import Button from "../button/button";
 import Title from "../title/title";
 import styles from "./achievement.module.css";
@@ -15,21 +11,9 @@ interface IAchievementProps {
 }
 
 const Achievement = ({ goalName, onClose }: IAchievementProps) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { authUser } = useSelector((state: RootState) => state.userAuth);
 
   function handleClick() {
-    if (authUser?.uid) {
-      dispatch(
-        updateUserThunk({
-          uid: authUser.uid,
-          hasSeenAchievement: true,
-          hasAlert: false,
-        }),
-      );
-      dispatch(updateAuthUser({ hasSeenAchievement: true }));
-    }
     onClose();
     navigate("/goals");
   }

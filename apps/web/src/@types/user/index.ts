@@ -14,7 +14,6 @@ export interface IUser {
   walletUpdatedAt?: string;
   hasSeenTutorial?: boolean;
   hasSeenWelcome?: boolean;
-  hasSeenAchievement?: boolean;
 }
 
 export interface IUserFinancesSlice {

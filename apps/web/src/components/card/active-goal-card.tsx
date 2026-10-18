@@ -1,12 +1,10 @@
 import { CircleCheckBig } from "lucide-react";
-import React from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { RootState, useAppDispatch } from "../../store/configure-store";
 import { openModalState } from "../../store/reducers/modal/modal";
 import { updateGoalThunk } from "../../store/thunks/goal/goal-data";
-import { shouldShowAchievementModal } from "../../utils/achievement/should-show-achievement";
 import calculateGoalProgress from "../../utils/goal/calculate-goal-progress";
 import formatCurrency from "../../utils/text/format-currency";
 import CircularProgress from "../circular-progress/circular-progress";
@@ -19,7 +17,6 @@ const ActiveGoalCard = () => {
   const dispatch = useAppDispatch();
   const { authUser } = useSelector((state: RootState) => state.userAuth);
   const { goals } = useSelector((state: RootState) => state.userFinances);
-  const hasShownAchievement = React.useRef(false);
 
   const activeGoal = goals.find((goal) => goal.status === "active") ?? null;
   const walletValue = authUser?.wallet ?? 0;
@@ -27,23 +24,20 @@ const ActiveGoalCard = () => {
     ? calculateGoalProgress(walletValue, activeGoal.value)
     : 0;
 
-  React.useEffect(() => {
-    if (hasShownAchievement.current || !authUser?.uid || !activeGoal) return;
-    if (shouldShowAchievementModal(progress, authUser.hasSeenAchievement)) {
-      hasShownAchievement.current = true;
-      dispatch(openModalState({ id: "achievement", entity: activeGoal.name }));
-    }
-  }, [progress, activeGoal, authUser, dispatch]);
-
-  function handleMarkAsCompleted() {
+  async function handleMarkAsCompleted() {
     if (!authUser?.uid || !activeGoal) return;
-    dispatch(
-      updateGoalThunk({
-        userId: authUser.uid,
-        goal: { id: activeGoal.id, status: "completed" },
-        hasAlert: false,
-      }),
-    );
+    try {
+      await dispatch(
+        updateGoalThunk({
+          userId: authUser.uid,
+          goal: { id: activeGoal.id, status: "completed" },
+          hasAlert: false,
+        }),
+      ).unwrap();
+      dispatch(openModalState({ id: "achievement", entity: activeGoal.name }));
+    } catch {
+      // updateGoalThunk already surfaces the error via its own alert/toast
+    }
   }
 
   return (

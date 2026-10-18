@@ -10,6 +10,9 @@
 	<a href="https://nest-egg-ef466.web.app">
 		<img src="https://img.shields.io/badge/Deploy-Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white" alt="Deploy Firebase" />
 	</a>
+	<a href="https://www.figma.com/design/qF8gQ5wW31rnZbH4EEA6Dl/Nest-Egg?m=auto&t=qERLdBHohzsT40w4-1">
+		<img src="https://img.shields.io/badge/Prototype-Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" alt="Figma prototype" />
+	</a>
 	<img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white" alt="React 19" />
 	<img src="https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5" />
 	<img src="https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite 6" />
@@ -202,6 +205,11 @@ and is not intended to be written by clients.
 ## 🚀 Deploy
 
 Access the live version at: [nest-egg-ef466.web.app](https://nest-egg-ef466.web.app).
+
+## 🎨 Design
+
+The project's Figma prototype is available at:
+[figma.com/design/qF8gQ5wW31rnZbH4EEA6Dl/Nest-Egg](https://www.figma.com/design/qF8gQ5wW31rnZbH4EEA6Dl/Nest-Egg?m=auto&t=qERLdBHohzsT40w4-1).
 
 ## 🤝 Contributing
 
